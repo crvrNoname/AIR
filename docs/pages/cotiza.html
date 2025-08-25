@@ -1,0 +1,136 @@
+<!-- docs/pages/cotiza.html (placeholders en contactos) -->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AIR – Mecánica y Electrónica</title>
+  <meta name="description" content="Su auto va a quedar JOYA" />
+
+  <!-- Si publicas en GitHub Pages (Project Pages) y quieres forzar, pon data-base="/webGenerica02".
+       En local (Live Server) déjalo vacío "" -->
+  <meta id="site-base" data-base="">
+
+  <!-- Sin href: el script los setea (evita 404/MIME antes de tiempo) -->
+  <link id="icon-svg" rel="icon" type="image/svg+xml" />
+  <link id="icon-shortcut" rel="shortcut icon" />
+  <meta name="theme-color" content="#0f1115" />
+  <link id="css-main" rel="stylesheet" />
+
+  <!-- OG (puedes dejarlos relativos; no afectan la carga de la página) -->
+  <meta property="og:title" content="AIR" />
+  <meta property="og:description" content="Su auto va a quedar JOYA" />
+  <meta property="og:image" content="./assets/img/logo.svg" />
+  <meta property="og:type" content="website" />
+
+  <!-- Bootstrap de rutas: decide prefijo y asigna href de CSS/JS/Favicon -->
+  <script>
+    (function () {
+      function computeBase() {
+        const hinted = document.getElementById('site-base')?.getAttribute('data-base') || '';
+        const isLocal = /^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/i.test(location.hostname);
+        if (isLocal) return '';                            // Live Server → sin prefijo
+        if (hinted)  return hinted.replace(/\/+$/, '');    // Pages forzado
+        if (location.hostname.endsWith('github.io')) {     // Auto para Pages
+          const seg = location.pathname.split('/').filter(Boolean)[0];
+          return seg ? '/' + seg : '';
+        }
+        return '';
+      }
+      const base = computeBase();
+      const inPagesFolder = /\/pages\//.test(location.pathname);
+      // Si usas estructura docs/ + pages/, las rutas relativas también son válidas:
+      const rel = inPagesFolder ? '..' : '.';
+
+      // 1) Asigna favicon y css con prefijo base (para Pages) o relativo (para local)
+      function setHref(id, path) {
+        const el = document.getElementById(id);
+        if (el) el.setAttribute('href', (base || rel) + path);
+      }
+      setHref('icon-svg',      '/assets/img/favicon.svg');
+      setHref('icon-shortcut', '/assets/img/favicon.svg');
+      setHref('css-main',      '/assets/css/main.css');
+
+      // 2) Inyecta main.js (ESM) con el mismo prefijo
+      const s = document.createElement('script');
+      s.type = 'module';
+      s.src  = (base || rel) + '/assets/js/main.js';
+      s.defer = true;
+      document.head.appendChild(s);
+
+      // DEBUG opcional
+      // console.log('[bootstrap] base=', base, 'rel=', rel, 'src=', s.src);
+    })();
+  </script>
+</head>
+
+<body class="page page--cotiza">
+  <header class="header">
+    <div class="container header__inner">
+               <!-- HeaderLogo -->
+<a href="./index.html" class="brand" aria-label="Ir al inicio">
+  <img class="brand__logo js-logo" alt="Logo AIR" />
+  <span class="brand__name">AIR</span>
+</a>
+      <button class="nav__toggle" aria-expanded="false" aria-controls="nav">☰</button>
+      <nav id="nav" class="nav" aria-label="Principal">
+        <ul class="nav__list">
+          <li><a href="../index.html">Inicio</a></li>
+          <li><a href="./servicios.html">Servicios</a></li>
+          <li><a href="./cotiza.html" aria-current="page">Cotiza</a></li>
+          <li><a href="./agendar.html">Agendar</a></li>
+          <li><a href="./contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main container">
+    <header class="section__header">
+      <h1>Solicitar cotización</h1>
+      <p>Completa el formulario y te responderemos pronto.</p>
+    </header>
+
+    <form id="quoteForm" class="form" novalidate>
+      <div class="form__grid">
+        <label class="form__field">
+          <span>Nombre</span>
+          <input name="nombre" autocomplete="name" required />
+        </label>
+        <label class="form__field">
+          <span>Correo</span>
+          <input type="email" name="email" autocomplete="email" required />
+        </label>
+        <label class="form__field">
+          <span>Teléfono</span>
+          <input type="tel" name="telefono" autocomplete="tel" required />
+        </label>
+        <label class="form__field">
+          <span>Patente (opcional)</span>
+          <input name="patente" />
+        </label>
+        <label class="form__field form__field--full">
+          <span>Servicio requerido</span>
+          <select name="servicio" required id="quoteServiceSelect"></select>
+        </label>
+        <label class="form__field form__field--full">
+          <span>Mensaje</span>
+          <textarea name="mensaje" rows="4" required></textarea>
+        </label>
+      </div>
+
+      <div class="form__actions">
+        <button class="btn btn--primary" type="submit">Enviar</button>
+        <a class="btn btn--secondary" href="#" id="quoteWhatsApp">Enviar por WhatsApp</a>
+      </div>
+
+      <p class="form__msg" id="quoteMsg" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+
+   <!-- placeholder del footer compartido -->
+<div data-include="/partials/footer.html"></div>
+
+  <script type="module" src="../assets/js/main.js"></script>
+</body>
+</html>

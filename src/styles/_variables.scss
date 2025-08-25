@@ -1,0 +1,90 @@
+/* src/styles/_variables.scss */
+
+/* 🔹 Tokens Sass (no dependen del tema) */
+$container: 1200px;
+$radius: 12px;
+$shadow: 0 2px 8px rgba(0,0,0,.25);
+$gap: 16px; // 👈 Nueva variable global para espacios en grids y layouts
+
+/* (si necesitas más constantes fijas, agrégalas aquí) */
+
+/* 🔹 Tokens CSS (sí dependen del tema, se sobrescriben con [data-theme]) */
+:root {
+  --bg: #0f1115;
+  --fg: #e5e7eb;
+  --muted: #9ca3af;
+
+  --brand: #2dd4bf;
+  --brand-600: #14b8a6;
+  --accent: #60a5fa;
+  --warn: #f59e0b;
+
+  --card-bg: #111827;
+  --card-bd: #1f2937;
+  --btn-fg: #0f1115;
+
+    --wa-bg: #2dd4bf;                  /* fondo del botón */
+  --wa-fg: #003018;                  /* texto/contraste si lo usas */
+  --wa-dropshadow: rgba(240,240,240,.85); /* halo claro por defecto */
+}
+
+/* 1) ACTUAL */
+html[data-theme="actual"] {
+  --bg: #0f1115;
+  --fg: #e5e7eb;
+  --muted: #9ca3af;
+
+  --brand: #2dd4bf;
+  --brand-600: #14b8a6;
+  --accent: #60a5fa;
+  --warn: #f59e0b;
+
+  --card-bg: #0f172a;
+  --card-bd: #1f2937;
+  --btn-fg: #0f1115;
+
+    --wa-bg: #2dd4bf;
+  --wa-fg: #003018;
+    --wa-dropshadow: #e5e7eb;;
+}
+
+/* 2) PROPUESTA */
+html[data-theme="propuesta"] {
+  --bg: #0b1020;
+  --fg: #edf2f7;
+  --muted: #a0aec0;
+
+  --brand: #2dd4bf;
+  --brand-600: #12a79a;
+  --accent: #60a5fa;
+  --warn: #f59e0b;
+
+  --card-bg: #0f162e;
+  --card-bd: #1c2541;
+  --btn-fg: #0b1020;
+
+    --wa-bg: #0b1020;                   /* mantenemos turquesa, look consistente */
+  --wa-fg: #200b18;
+  /* halo claro porque el entorno es dark */
+  --wa-dropshadow: rgba(240,240,240,.85);
+}
+
+/* 3) SCANIA */
+html[data-theme="scania"] {
+  --brand: #041E42;   /* Azul Scania */
+  --accent: #AE202B;  /* Rojo V8 */
+
+  --bg: #FAFAFA;
+  --fg: #000000;
+  --muted: #53565A;
+
+  --warn: #AF133B;
+  --card-bg: #FFFFFF;
+  --card-bd: #C8C9C7;
+  --btn-fg: #FAFAFA;
+
+   --wa-bg: #041E42;                   /* Azul Scania */
+  --wa-fg: #FAFAFA;
+  /* halo oscuro para fondo claro */
+  --wa-dropshadow:  #FAFAFA;
+}

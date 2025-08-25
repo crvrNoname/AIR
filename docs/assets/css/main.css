@@ -1,0 +1,507 @@
+@charset "UTF-8";
+/* src/styles/main.scss */
+/* src/styles/_variables.scss */
+/* 🔹 Tokens Sass (no dependen del tema) */
+/* (si necesitas más constantes fijas, agrégalas aquí) */
+/* 🔹 Tokens CSS (sí dependen del tema, se sobrescriben con [data-theme]) */
+:root {
+  --bg: #0f1115;
+  --fg: #e5e7eb;
+  --muted: #9ca3af;
+  --brand: #2dd4bf;
+  --brand-600: #14b8a6;
+  --accent: #60a5fa;
+  --warn: #f59e0b;
+  --card-bg: #111827;
+  --card-bd: #1f2937;
+  --btn-fg: #0f1115;
+  --wa-bg: #2dd4bf; /* fondo del botón */
+  --wa-fg: #003018; /* texto/contraste si lo usas */
+  --wa-dropshadow: rgba(240,240,240,.85); /* halo claro por defecto */
+}
+
+/* 1) ACTUAL */
+html[data-theme=actual] {
+  --bg: #0f1115;
+  --fg: #e5e7eb;
+  --muted: #9ca3af;
+  --brand: #2dd4bf;
+  --brand-600: #14b8a6;
+  --accent: #60a5fa;
+  --warn: #f59e0b;
+  --card-bg: #0f172a;
+  --card-bd: #1f2937;
+  --btn-fg: #0f1115;
+  --wa-bg: #2dd4bf;
+  --wa-fg: #003018;
+  --wa-dropshadow: #e5e7eb;
+}
+
+/* 2) PROPUESTA */
+html[data-theme=propuesta] {
+  --bg: #0b1020;
+  --fg: #edf2f7;
+  --muted: #a0aec0;
+  --brand: #2dd4bf;
+  --brand-600: #12a79a;
+  --accent: #60a5fa;
+  --warn: #f59e0b;
+  --card-bg: #0f162e;
+  --card-bd: #1c2541;
+  --btn-fg: #0b1020;
+  --wa-bg: #0b1020; /* mantenemos turquesa, look consistente */
+  --wa-fg: #200b18;
+  /* halo claro porque el entorno es dark */
+  --wa-dropshadow: rgba(240,240,240,.85);
+}
+
+/* 3) SCANIA */
+html[data-theme=scania] {
+  --brand: #041E42; /* Azul Scania */
+  --accent: #AE202B; /* Rojo V8 */
+  --bg: #FAFAFA;
+  --fg: #000000;
+  --muted: #53565A;
+  --warn: #AF133B;
+  --card-bg: #FFFFFF;
+  --card-bd: #C8C9C7;
+  --btn-fg: #FAFAFA;
+  --wa-bg: #041E42; /* Azul Scania */
+  --wa-fg: #FAFAFA;
+  /* halo oscuro para fondo claro */
+  --wa-dropshadow: #FAFAFA;
+}
+
+/* src/styles/main.scss */
+/* src/styles/_mixins.scss */
+/* Preferencias de UI */
+:root {
+  color-scheme: dark light;
+}
+
+html[data-theme=scania] {
+  color-scheme: light;
+}
+
+/* Reset */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* Enlaces */
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Layout */
+.container {
+  width: min(100% - 32px, 1200px);
+  margin-inline: auto;
+}
+
+/* Utilidades */
+.small {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.mt-lg {
+  margin-top: 2rem;
+}
+
+/* Accesibilidad */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+.skip-link:focus {
+  left: 8px;
+  top: 8px;
+  background: #000;
+  color: #fff;
+  padding: 8px 10px;
+  z-index: 1000;
+}
+
+/* Header & Nav */
+.header {
+  background: color-mix(in oklab, var(--bg) 80%, transparent);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.header__inner {
+  width: min(100% - 32px, 1200px);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 16px; /* 👈 ojo, define $gap en variables.scss */
+  padding: 0.5rem 0;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.brand__logo {
+  width: auto;
+  height: 60px;
+  max-height: 8vh;
+}
+
+.nav__toggle {
+  display: none;
+  background: none;
+  border: 0;
+  font-size: 1.4rem;
+  color: var(--fg);
+}
+
+.nav__list {
+  display: flex;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav a[aria-current=page] {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.header__cta {
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width: 880px) {
+  .header__inner {
+    grid-template-columns: 1fr auto;
+  }
+  .nav {
+    display: none;
+  }
+  .nav__toggle {
+    display: inline-block;
+  }
+  .nav--open {
+    display: block;
+  }
+  .nav__list {
+    flex-direction: column;
+    padding: 12px 0;
+  }
+}
+/* Botones */
+.btn {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  margin-top: 15px;
+}
+.btn--primary {
+  background: var(--brand);
+  color: var(--btn-fg);
+}
+.btn--secondary {
+  background: var(--accent);
+  color: var(--btn-fg);
+}
+.btn--ghost {
+  background: transparent;
+  border-color: var(--card-bd);
+  color: var(--fg);
+}
+
+/* Hero */
+.hero {
+  padding: 56px 0 28px;
+  background: radial-gradient(80% 60% at 50% 0%, color-mix(in oklab, var(--brand) 20%, transparent) 0%, transparent 60%);
+}
+
+.hero__inner {
+  text-align: center;
+}
+
+.lead {
+  color: var(--muted);
+  max-width: 760px;
+  margin: 10px auto 0;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(12, 1fr);
+}
+.grid > * {
+  grid-column: span 12;
+}
+@media (min-width: 640px) {
+  .grid > * {
+    grid-column: span 6;
+  }
+}
+@media (min-width: 960px) {
+  .grid > * {
+    grid-column: span 4;
+  }
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg);
+  color: var(--fg);
+  border-radius: 12px;
+  border: 1px solid var(--card-bd);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.card__media {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  display: block;
+}
+
+.card__body {
+  padding: 14px;
+}
+
+.card__title {
+  margin: 0 0 6px;
+  color: var(--fg);
+}
+
+.card__desc {
+  color: var(--muted);
+  margin: 0;
+}
+
+/* Chips */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  background: var(--card-bg);
+  color: var(--fg);
+  border-radius: 12px;
+  border: 1px solid var(--card-bd);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  padding: 8px 12px;
+}
+
+/* Formularios */
+.form {
+  background: var(--card-bg);
+  color: var(--fg);
+  border-radius: 12px;
+  border: 1px solid var(--card-bd);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  padding: 16px;
+}
+
+.form__grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.form__field {
+  display: grid;
+  gap: 6px;
+  grid-column: span 12;
+}
+
+.form__field--full {
+  grid-column: span 12;
+}
+
+.form__field input,
+.form__field select,
+.form__field textarea {
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--fg);
+}
+
+.form__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.form__msg {
+  margin-top: 8px;
+  color: var(--warn);
+}
+
+/* ===== Footer centrado (mobile-first, themable) ===== */
+.footer {
+  margin-top: 48px;
+  padding: 24px 0;
+  border-top: 1px solid var(--card-bd);
+  background: transparent;
+  color: var(--fg);
+  text-align: center; /* ⬅️ centro global de textos */
+}
+.footer h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: var(--fg);
+}
+.footer p {
+  margin: 8px 0;
+  color: var(--muted);
+}
+.footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* 1 col (móvil) → 2 col (>=640) → 4 col (>=960), con contenido centrado */
+.footer__grid {
+  width: min(100% - 32px, 1200px);
+  margin-inline: auto;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+  /* centra los ítems dentro de cada celda */
+  justify-items: center;
+  align-items: start;
+  /* columnas responsivas */
+  /* cada “columna” centrada y con ancho legible */
+}
+@media (min-width: 640px) {
+  .footer__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 960px) {
+  .footer__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.footer__grid > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* ⬅️ centro horizontal del contenido */
+  gap: 6px;
+  max-width: 32ch; /* ⬅️ evita líneas muy largas, más armónico */
+}
+
+/* Logo del footer: centrado y con escalado suave */
+.footer__logo {
+  width: auto;
+  height: 48px; /* móvil */
+  max-height: 8vh;
+  display: block;
+  margin-inline: auto; /* ⬅️ asegura centrado del img */
+}
+@media (min-width: 640px) {
+  .footer__logo {
+    height: 56px;
+  }
+}
+@media (min-width: 960px) {
+  .footer__logo {
+    height: 60px;
+  }
+}
+
+/* Lista de enlaces de contacto, centrada */
+.footer .list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.footer .list li + li {
+  margin-top: 6px;
+}
+
+/* Copiright centrado */
+.footer__copy {
+  width: min(100% - 32px, 1200px);
+  margin-inline: auto;
+  text-align: center;
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Switcher de tema centrado en todos los tamaños */
+.footer .theme-switcher {
+  width: min(100% - 32px, 1200px);
+  margin-inline: auto;
+  margin-top: 12px;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center; /* ⬅️ centrado estable */
+}
+
+/* WhatsApp flotante */
+.wafloat {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  background: var(--wa-bg);
+  color: var(--wa-fg);
+  border-radius: 999px;
+  padding: 12px; /* padding parejo */
+  font-size: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); /* sombra del contenedor */
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.wafloat img {
+  width: 48px; /* más consistente que vw/vh */
+  height: 48px;
+  display: block;
+  /* glow del ícono según tema */
+  filter: drop-shadow(0 0 6px var(--wa-dropshadow));
+  -webkit-filter: drop-shadow(0 0 6px var(--wa-dropshadow));
+}
+
+/*# sourceMappingURL=main.css.map */

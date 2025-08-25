@@ -1,0 +1,12 @@
+# .gitignore — recomendado
+# Config local (no versionar)
+config.json
+docs/config.json
+
+# Node / sistema
+node_modules/
+dist/
+*.log
+.DS_Store
+.sass-cache/
+sandBox

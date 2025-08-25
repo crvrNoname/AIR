@@ -1,0 +1,14 @@
+{
+  "NOMBRE_MARCA": "{{NOMBRE_MARCA}}",
+  "DESCRIPCION_CORTA": "{{DESCRIPCION_CORTA}}",
+  "PHONE_VISIBLE": "{{+56 9 XXXXXXXX}}",
+  "WHATSAPP_E164": "+56912345678",
+  "EMAIL": "{{correo@dominio.cl}}",
+  "DIRECCION_COMPLETA": "{{DIRECCION_COMPLETA}}",
+  "GOOGLE_MAPS_URL": "https://maps.google.com/?q={{DIRECCION_COMPLETA}}",
+  "GOOGLE_MAPS_IFRAME_SRC": "https://www.google.com/maps/embed?pb=...",
+  "HORARIO_ATENCION": "{{L–V 09:00–18:00, S 09:00–14:00}}",
+  "INSTAGRAM_URL": "https://instagram.com/{{cuenta}}",
+  "FACEBOOK_URL": "https://facebook.com/{{pagina}}",
+  "PALETA_HEX": "{{paleta hex}}"
+}

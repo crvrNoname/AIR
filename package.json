@@ -1,0 +1,24 @@
+{
+  "name": "mi-sitio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sitio estático para taller mecánico/electrónico - GitHub Pages",
+  "scripts": {
+    "dev:css": "sass --watch src/styles/main.scss docs/assets/css/main.css",
+    "watch:js": "cpx \"src/js/**/*.js\" docs/assets/js -w",
+    "watch:assets": "cpx \"src/assets/**/*\" docs/assets -w",
+    "dev": "npm-run-all --parallel dev:css watch:js watch:assets",
+    "build:css": "sass src/styles/main.scss docs/assets/css/main.css --style=compressed --no-source-map",
+    "copy:js": "cpx \"src/js/**/*.js\" docs/assets/js",
+    "copy:assets": "cpx \"src/assets/**/*\" docs/assets",
+       "inject:cfg": "node scripts/inject-config.mjs",
+    "build": "npm-run-all build:css copy:js copy:assets inject:cfg",
+      "serve": "http-server docs -p 5173 -c-1",
+  "config:init": "node scripts/inject-config.mjs --init"
+  },
+  "devDependencies": {
+    "cpx": "^1.5.0",
+    "npm-run-all": "^4.1.5",
+    "sass": "^1.90.0"
+  }
+}
