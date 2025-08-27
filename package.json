@@ -11,10 +11,8 @@
     "build:css": "sass src/styles/main.scss docs/assets/css/main.css --style=compressed --no-source-map",
     "copy:js": "cpx \"src/js/**/*.js\" docs/assets/js",
     "copy:assets": "cpx \"src/assets/**/*\" docs/assets",
-       "inject:cfg": "node scripts/inject-config.mjs",
     "build": "npm-run-all build:css copy:js copy:assets inject:cfg",
-      "serve": "http-server docs -p 5173 -c-1",
-  "config:init": "node scripts/inject-config.mjs --init"
+      "serve": "http-server docs -p 5173 -c-1"
   },
   "devDependencies": {
     "cpx": "^1.5.0",

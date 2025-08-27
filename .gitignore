@@ -1,6 +1,6 @@
 # .gitignore — recomendado
 # Config local (no versionar)
-config.json
+
 docs/config.json
 
 # Node / sistema

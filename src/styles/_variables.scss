@@ -28,48 +28,9 @@ $gap: 16px; // 👈 Nueva variable global para espacios en grids y layouts
   --wa-dropshadow: rgba(240,240,240,.85); /* halo claro por defecto */
 }
 
-/* 1) ACTUAL */
-html[data-theme="actual"] {
-  --bg: #0f1115;
-  --fg: #e5e7eb;
-  --muted: #9ca3af;
 
-  --brand: #2dd4bf;
-  --brand-600: #14b8a6;
-  --accent: #60a5fa;
-  --warn: #f59e0b;
 
-  --card-bg: #0f172a;
-  --card-bd: #1f2937;
-  --btn-fg: #0f1115;
-
-    --wa-bg: #2dd4bf;
-  --wa-fg: #003018;
-    --wa-dropshadow: #e5e7eb;;
-}
-
-/* 2) PROPUESTA */
-html[data-theme="propuesta"] {
-  --bg: #0b1020;
-  --fg: #edf2f7;
-  --muted: #a0aec0;
-
-  --brand: #2dd4bf;
-  --brand-600: #12a79a;
-  --accent: #60a5fa;
-  --warn: #f59e0b;
-
-  --card-bg: #0f162e;
-  --card-bd: #1c2541;
-  --btn-fg: #0b1020;
-
-    --wa-bg: #0b1020;                   /* mantenemos turquesa, look consistente */
-  --wa-fg: #200b18;
-  /* halo claro porque el entorno es dark */
-  --wa-dropshadow: rgba(240,240,240,.85);
-}
-
-/* 3) SCANIA */
+/* SCANIA */
 html[data-theme="scania"] {
   --brand: #041E42;   /* Azul Scania */
   --accent: #AE202B;  /* Rojo V8 */
@@ -87,4 +48,24 @@ html[data-theme="scania"] {
   --wa-fg: #FAFAFA;
   /* halo oscuro para fondo claro */
   --wa-dropshadow:  #FAFAFA;
+}
+/* SCANIA DARK */
+html[data-theme="scania-dark"] {
+  /* Identidad Scania, en dark */
+  --brand: #0A2A5E;     /* Azul Scania adaptado a dark */
+  --accent: #AE202B;    /* Rojo V8 (igual que claro) */
+
+  --bg: #0B1220;        /* Fondo principal (navy oscuro) */
+  --fg: #E6E8EB;        /* Texto */
+  --muted: #9AA3AD;     /* Texto secundario */
+
+  --warn: #AF133B;
+  --card-bg: #0F1629;   /* Tarjetas */
+  --card-bd: #1C2541;   /* Bordes/sutiles */
+  --btn-fg: #FAFAFA;    /* Texto en botones */
+
+  /* WhatsApp FAB (consistente con marca) */
+  --wa-bg: #041E42;                   /* Azul Scania */
+  --wa-fg: #FAFAFA;
+  --wa-dropshadow: rgba(240,240,240,.85);
 }

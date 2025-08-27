@@ -1,6 +1,6 @@
 // src/js/modules/theme.js
 const THEME_KEY = 'mi-sitio:theme';
-const DEFAULT_THEME = 'actual';
+const DEFAULT_THEME = 'scania';
 
 // Prefijo correcto (local: relativo . / .. ; Pages: /REPO)
 function getBasePrefix() {
@@ -76,9 +76,9 @@ function updateFaviconForTheme(theme) {
 
   const base = getBasePrefix();
   const map = {
-    actual:    `${base}/assets/img/favicon.svg`,
-    propuesta: `${base}/assets/img/favicon-dark.svg`,
-    scania:    `${base}/assets/img/favicon-scania.svg`,
+        scania:    `${base}/assets/img/favicon-scania.svg`,
+          'scania-dark':`${base}/assets/img/favicon-scania.svg` 
+        
   };
 
   const href = (map[theme] || map.actual) + `?v=${Date.now()}`; // cache-busting
