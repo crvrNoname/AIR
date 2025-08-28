@@ -1,11 +1,11 @@
 // src/js/main.js
-import { initNav } from './modules/nav.js';
-import { renderHomeServices, renderServicesPage } from './modules/services.js';
-import { initQuoteForm, initScheduleForm } from './modules/form.js';
-import { initWhatsAppLinks, setCurrentYear } from './modules/contact.js';
-import { initThemeSwitcher } from './modules/theme.js';
-import { includePartials } from './modules/partials.js';
-import { initMindMap } from './modules/mindmap.js';
+import { initNav } from '../../assets/js/modules/nav.js';
+import { renderHomeServices, renderServicesPage } from '../../assets/js/modules/services.js';
+import { initQuoteForm, initScheduleForm } from '../../assets/js/modules/form.js';
+import { initWhatsAppLinks, setCurrentYear } from '../../assets/js/modules/contact.js';
+import { initThemeSwitcher } from '../../assets/js/modules/theme.js';
+import { includePartials } from '../../assets/js/modules/partials.js';
+import { initMindMap } from '../../assets/js/modules/mindmap.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   // 1) incluir footer (y/o header si más adelante lo separas)
