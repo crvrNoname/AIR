@@ -5,6 +5,7 @@ import { initQuoteForm, initScheduleForm } from './modules/form.js';
 import { initWhatsAppLinks, setCurrentYear } from './modules/contact.js';
 import { initThemeSwitcher } from './modules/theme.js';
 import { includePartials } from './modules/partials.js';
+import { initMindMap } from './modules/mindmap.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   // 1) incluir footer (y/o header si más adelante lo separas)
@@ -21,11 +22,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   if (document.body.classList.contains('page--servicios')) {
     renderServicesPage('#services-grid-mecanica', '#services-grid-electronica');
+     initMindMap('#mindmap', { phone: '+56988934851' });
   }
   if (document.body.classList.contains('page--cotiza')) {
-    initQuoteForm('#quoteForm', '#quoteMsg', '#quoteServiceSelect', '#quoteWhatsApp', { phone: '{{WHATSAPP_E164}}' });
+    initQuoteForm('#quoteForm', '#quoteMsg', '#quoteServiceSelect', '#quoteWhatsApp', { phone: '+56988934851' });
   }
   if (document.body.classList.contains('page--agendar')) {
-    initScheduleForm('#scheduleForm', '#scheduleMsg', '#scheduleServiceSelect', '#scheduleWhatsApp', { phone: '{{WHATSAPP_E164}}' });
+    initScheduleForm('#scheduleForm', '#scheduleMsg', '#scheduleServiceSelect', '#scheduleWhatsApp', { phone: '+56988934851' });
   }
 });

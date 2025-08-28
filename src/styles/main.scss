@@ -262,3 +262,317 @@ a:hover { text-decoration: underline; }
     -webkit-filter: drop-shadow(0 0 6px var(--wa-dropshadow));
   }
 }
+
+/* ===================== Mind Map (clean) ===================== */
+.mindmap {
+  position: relative;
+  width: min(900px, 100%);
+  aspect-ratio: 1/1;
+  margin: 24px auto;
+  isolation: isolate;
+}
+
+/* capa para líneas */
+.mindmap__svg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+.mindmap__line {
+  stroke: var(--card-bd);
+  stroke-width: 2;
+  transition: stroke .2s ease;
+}
+.mindmap__line.is-hover,
+.mindmap__line.is-active { stroke: var(--accent); }
+
+/* Centro */
+.mindmap__center {
+  position: absolute; inset: 50% auto auto 50%;
+  transform: translate(-50%,-50%);
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  color: var(--fg);
+  border-radius: 999px;
+  width: clamp(160px, 26vmin, 220px);
+  height: clamp(160px, 26vmin, 220px);
+  display: grid; place-items: center;
+  text-align: center;
+  padding: 12px;
+  box-shadow: v.$shadow; /* <— usa el token SASS */
+  cursor: pointer;
+}
+.mindmap__center:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(0,0,0,.18); }
+.mindmap__center h3 { margin: 8px 0 4px; font-size: 1.05rem; }
+.mindmap__center p  { margin: 0; color: var(--muted); font-size: .9rem; }
+
+/* Base “card” (si alguna vez quieres volver a nodos con texto) */
+.mindmap__node {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  --r: 36vmin;      /* radio */
+  --a: 0deg;        /* ángulo */
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--a))
+    translate(var(--r))
+    rotate(calc(-1 * var(--a)));
+
+  width: clamp(120px, 18vmin, 160px);
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  border-radius: 14px;
+  padding: 10px 12px;
+  box-shadow: v.$shadow;
+  cursor: pointer;
+  user-select: none;
+
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  align-items: center;
+  gap: 8px;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.mindmap__node:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(0,0,0,.18); }
+
+/* ===== Modo icon-only (sin texto permanente) ===== */
+.mindmap__node--icon {
+  /* anula layout “card” */
+  width: clamp(56px, 7vmin, 72px);
+  height: clamp(56px, 7vmin, 72px);
+  padding: 0;
+  display: grid;
+  place-items: center;
+  grid-template-columns: none;
+  gap: 0;
+  border-radius: 14px;
+  line-height: 0; /* quita baseline */
+}
+
+/* pastilla del icono, monocromo y temable */
+.mindmap__icon {
+  inline-size: clamp(56px, 7vmin, 72px);
+  block-size: clamp(56px, 7vmin, 72px);
+  aspect-ratio: 1 / 1;
+  display: grid; place-items: center;
+  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  box-sizing: border-box;
+  color: var(--fg);              /* el svg hereda este color */
+}
+.mindmap__icon svg {
+  display: block;                /* quita espacio de línea */
+  width: 64%; height: 64%;
+  overflow: visible;
+  vector-effect: non-scaling-stroke;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Tooltip título (oculto por defecto) */
+.mindmap__label {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 8px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  color: var(--fg);
+  padding: 6px 8px;
+  border-radius: 8px;
+  box-shadow: v.$shadow;
+  font-size: .9rem; font-weight: 600;
+  display: none;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Mostrar tooltip con hover o por tap (data flag) */
+.mindmap__node--icon:hover .mindmap__label,
+.mindmap__node--icon[data-show-label="1"] .mindmap__label {
+  display: block;
+}
+
+/* realce del nodo al pasar/tocar */
+.mindmap__node--icon:hover,
+.mindmap__node--icon[data-show-label="1"] {
+  border-color: var(--accent);
+  box-shadow: 0 8px 20px rgba(0,0,0,.18);
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .mindmap { aspect-ratio: auto; }
+  .mindmap__svg { display: none; }
+  .mindmap__center {
+    position: static; width: 100%; height: auto; border-radius: 16px;
+    transform: none; inset: auto;
+  }
+  .mindmap__node {
+    position: static; width: 100%;
+    transform: none; margin-top: 12px;
+  }
+  /* icon-only: que no se estire a 100% al hacerse estático */
+  .mindmap__node--icon {
+    margin: 10px auto 0;
+    width: clamp(64px, 12vw, 76px);
+    height: clamp(64px, 12vw, 76px);
+  }
+}
+
+
+/* ===================== Modal ===================== */
+.mm-modal {
+  position: fixed; inset: 0; z-index: 100;
+  display: none;
+}
+.mm-modal[open] { display: block; }
+.mm-backdrop {
+  position: absolute; inset: 0; background: rgba(0,0,0,.55);
+  backdrop-filter: blur(2px);
+}
+.mm-dialog {
+  position: absolute; inset: 50% auto auto 50%;
+  transform: translate(-50%,-50%);
+  width: min(920px, 92vw);
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  color: var(--fg);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.mm-media { aspect-ratio: 4/3; width: 100%; height: 100%; object-fit: cover; }
+.mm-body { padding: 14px 16px; }
+.mm-title { margin: 0 0 6px; font-size: 1.15rem; }
+.mm-desc  { margin: 0 0 12px; color: var(--muted); }
+.mm-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+@media (max-width: 820px) {
+  .mm-dialog { grid-template-columns: 1fr; }
+  .mm-media { max-height: 44vh; }
+}
+
+/* Ícono monocromo en nodos del mindmap */
+.mindmap__icon {
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border-radius: 8px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  color: var(--fg);              /* <- el svg toma este color */
+}
+.mindmap__icon svg {
+  width: 22px; height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  vector-effect: non-scaling-stroke;
+}
+
+.mindmap__center { cursor: pointer; }
+.mindmap__center:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(0,0,0,.18); }
+
+/* ===== Mindmap: versión icon-only ===== */
+.mindmap__node--icon {
+  /* tamaño compacto y armonioso */
+  width: clamp(56px, 7vmin, 72px);
+  height: clamp(56px, 7vmin, 72px);
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  position: absolute; /* ya lo era, pero reafirmamos para el tooltip */
+  padding: 0;         /* sin padding para que el ícono “respire” */
+}
+
+/* cajita del ícono (monocromo, respeta tema) */
+.mindmap__icon {
+  width: 70%;               /* escala relativa al contenedor */
+  height: 70%;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  color: var(--fg);
+}
+
+.mindmap__icon svg {
+  width: 65%;
+  height: 65%;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.9;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Oculta texto por defecto, lo usamos como tooltip */
+.mindmap__label {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 8px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  color: var(--fg);
+  padding: 6px 8px;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  font-size: .9rem;
+  font-weight: 600;
+  display: none;           /* ← oculto por defecto */
+  pointer-events: none;    /* no tapa el hover del nodo */
+  z-index: 2;
+}
+
+/* Mostrar tooltip con hover o con data flag (tap) */
+.mindmap__node--icon:hover .mindmap__label,
+.mindmap__node--icon[data-show-label="1"] .mindmap__label {
+  display: block;
+}
+
+/* realce del nodo + línea al pasar/tocar */
+.mindmap__node--icon:hover,
+.mindmap__node--icon[data-show-label="1"] {
+  border-color: var(--accent);
+  box-shadow: 0 8px 20px rgba(0,0,0,.18);
+}
+
+/* Centrado real de los iconos del mindmap */
+.mindmap__node--icon{
+  display: grid;
+  place-items: center;     /* centro perfecto */
+  line-height: 0;          /* elimina baseline que desplaza */
+}
+
+.mindmap__icon{
+  inline-size: clamp(56px, 7vmin, 72px);
+  block-size: clamp(56px, 7vmin, 72px);
+  aspect-ratio: 1 / 1;     /* caja 1:1 estable */
+  display: grid;
+  place-items: center;     /* centro interno */
+  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  box-sizing: border-box;
+}
+
+.mindmap__icon svg{
+  display: block;          /* quita espacio de línea */
+  width: 64%;
+  height: 64%;
+  overflow: visible;
+  vector-effect: non-scaling-stroke;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
