@@ -12,8 +12,15 @@ export const SERVICES = {
   electronica: [
     { id: 'scanner',       title: 'Diagnóstico con escáner',  img: 'scanner.jpg',               desc: 'Lectura de códigos OBD y análisis.' },
     { id: 'electricidad',  title: 'Electricidad automotriz',  img: 'electricidadAutomotriz.jpg',desc: 'Reparación de circuitos y componentes.' },
+  ],
+    electronicaAvanzada: [
+    { id: 'codificar', title: 'Codificar' },
+    { id: 'ecu', title: 'Desbloqueo ECU' },
+    { id: 'dpf', title: 'Regenerar DPF' },
+    { id: 'cuerpo', title: 'Reprogramar cuerpo de aceleración' },
   ]
 };
+
 
 // 🔧 Normalizador de rutas de imagen
 function getImgUrl(input, base = '..') {
@@ -64,9 +71,15 @@ export function renderHomeServices(selector) {
 }
 
 // Página /pages/services.html: base = '..'
-export function renderServicesPage(selMec, selElec) {
+export function renderServicesPage(selMec, selElec, selElecAdv) {
   const gridM = document.querySelector(selMec);
   const gridE = document.querySelector(selElec);
+  const gridEA = document.querySelector(selElecAdv);
+
   if (gridM) gridM.innerHTML = SERVICES.mecanica.map(i => cardHTML(i, '..')).join('');
   if (gridE) gridE.innerHTML = SERVICES.electronica.map(i => cardHTML(i, '..')).join('');
+  if (gridEA) gridEA.innerHTML = SERVICES.electronicaAvanzada.map(i => `<li class="chip">${i.title}</li>`).join('');
 }
+
+
+

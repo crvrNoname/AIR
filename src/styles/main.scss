@@ -1,6 +1,8 @@
 /* src/styles/main.scss */
 @use "./variables" as v;
 @use "./mixins" as m;
+@use "./floatingBar";
+
 
 /* Preferencias de UI */
 :root { color-scheme: dark light; }
@@ -27,6 +29,12 @@ a:hover { text-decoration: underline; }
 /* Utilidades */
 .small { font-size: .9rem; color: var(--muted); }
 .mt-lg { margin-top: 2rem; }
+.subsection-title {
+  margin: 1.25rem 0 .5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--fg);
+}
 
 /* Accesibilidad */
 .skip-link {
@@ -221,6 +229,14 @@ a:hover { text-decoration: underline; }
   flex-wrap: wrap;
   justify-content: center;   /* ⬅️ centrado estable */
 }
+/* Botón de WhatsApp (usa los tokens del tema) */
+.btn--wa {
+  background: var(--wa-bg);
+  color: var(--wa-fg);
+  border-color: transparent;
+
+}
+
 
 
 /* WhatsApp flotante */

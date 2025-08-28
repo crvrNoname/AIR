@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 2) ahora sí inicializa todo, ya existen botones de tema y el FAB
   initThemeSwitcher();
   initNav();
-  initWhatsAppLinks({ phone: '{{WHATSAPP_E164}}' });
+  initWhatsAppLinks({ phone: '+56988934851'  });
   setCurrentYear();
 
   if (document.body.classList.contains('page--home')) {

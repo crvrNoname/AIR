@@ -53,16 +53,32 @@
 
   <div class="container footer__copy small">© <span id="year"></span> AIR - Service. Todos los derechos reservados.</div>
 
-<section class="theme-switcher" style="display:flex; gap:.5rem;">
-  <button class="button button--ghost js-theme" data-theme="scania" aria-pressed="false">Claro</button>
-  <button class="button button--ghost js-theme" data-theme="scania-dark" aria-pressed="false">Oscuro</button>
 </section>
 
 </footer>
 
 <!-- Botón flotante (el src del <img> lo pone theme.js según tema) -->
-<a class="wafloat" data-whatsapp id="waFloat"
-   href="https://api.whatsapp.com/send?phone=56988934851&text=HOLA! quiero una hora con el mecanicoSo!"
-   target="_blank" aria-label="Chatear por WhatsApp">
-  <img alt="Ícono WhatsApp">
+<!-- Floating Bar -->
+<aside class="floating-bar" aria-label="Accesos rápidos">
+ <!-- Tema: Claro -->
+<button type="button" class="floating-bar__item js-theme" id="btnThemeSun"
+        data-theme="scania" aria-pressed="false" aria-label="Tema claro">
+  <img alt="Tema Claro" />
+</button>
+
+<!-- Tema: Oscuro -->
+<button type="button" class="floating-bar__item js-theme" id="btnThemeMoon"
+        data-theme="scania-dark" aria-pressed="false" aria-label="Tema oscuro">
+  <img alt="Tema Oscuro" />
+</button>
+
+  <!-- WhatsApp (lo rellena initWhatsAppLinks con tu número) -->
+<!-- WhatsApp (floatBar, ícono gestionado por theme.js) -->
+<a data-whatsapp href="#" class="floating-bar__item" id="waFloatBar"
+   aria-label="WhatsApp" target="_blank" rel="noopener">
+  <img alt="WhatsApp" />
 </a>
+
+
+
+</aside>

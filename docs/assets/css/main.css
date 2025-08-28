@@ -40,11 +40,11 @@ html[data-theme=scania] {
 /* SCANIA DARK */
 html[data-theme=scania-dark] {
   /* Identidad Scania, en dark */
-  --brand: #0A2A5E; /* Azul Scania adaptado a dark */
+  --brand: #041E42; /* Azul Scania adaptado a dark */
   --accent: #AE202B; /* Rojo V8 (igual que claro) */
   --bg: #0B1220; /* Fondo principal (navy oscuro) */
   --fg: #E6E8EB; /* Texto */
-  --muted: #9AA3AD; /* Texto secundario */
+  --muted: #a0aec0; /* Texto secundario */
   --warn: #AF133B;
   --card-bg: #0F1629; /* Tarjetas */
   --card-bd: #1C2541; /* Bordes/sutiles */
@@ -57,6 +57,96 @@ html[data-theme=scania-dark] {
 
 /* src/styles/main.scss */
 /* src/styles/_mixins.scss */
+/* src/styles/_floatingBar.scss */
+.floating-bar {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: color-mix(in oklab, var(--card-bg) 92%, transparent);
+  padding: 12px;
+  border-radius: 18px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.floating-bar__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 45px;
+  height: 45px;
+  border-radius: 999px;
+  padding: 0 10px;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
+  color: var(--fg);
+  text-decoration: none;
+}
+.floating-bar__item:hover {
+  transform: scale(1.03);
+  background: color-mix(in oklab, var(--card-bg) 92%, var(--accent) 8%);
+  border-color: color-mix(in oklab, var(--card-bd) 80%, var(--accent) 20%);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+}
+.floating-bar__item img {
+  width: 28px;
+  height: 28px;
+  display: block;
+}
+.floating-bar__item span {
+  display: none;
+  font-size: 0.9rem;
+  color: var(--fg);
+}
+
+/* Mostrar etiquetas en hover en pantallas grandes */
+@media (hover: hover) and (pointer: fine) {
+  .floating-bar__item:hover span {
+    display: inline;
+  }
+}
+/* Resalta el activo (si decides activar scroll-spy más adelante) */
+.floating-bar__item.active {
+  background: var(--accent);
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.floating-bar__item.active img {
+  filter: brightness(0) invert(1);
+}
+.floating-bar__item.active span {
+  color: #fff;
+}
+
+/* Mobile: barra horizontal */
+@media (max-width: 640px) {
+  .floating-bar {
+    left: 10px;
+    right: 10px;
+    bottom: 12px;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 8px;
+    border-radius: 14px;
+    gap: 8px;
+  }
+  .floating-bar__item {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+  }
+  .floating-bar__item span {
+    display: inline;
+    font-size: 0.85rem;
+  }
+}
 /* Preferencias de UI */
 :root {
   color-scheme: dark light;
@@ -106,6 +196,13 @@ a:hover {
 
 .mt-lg {
   margin-top: 2rem;
+}
+
+.subsection-title {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--fg);
 }
 
 /* Accesibilidad */
@@ -460,6 +557,13 @@ a:hover {
   gap: 0.5rem;
   flex-wrap: wrap;
   justify-content: center; /* ⬅️ centrado estable */
+}
+
+/* Botón de WhatsApp (usa los tokens del tema) */
+.btn--wa {
+  background: var(--wa-bg);
+  color: var(--wa-fg);
+  border-color: transparent;
 }
 
 /* WhatsApp flotante */
