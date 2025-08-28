@@ -1,6 +1,8 @@
+
 // docs/assets/js/modules/mindmap.js
-import { SERVICES } from '../../../../src/js/modules/services.js';
-import { buildWhatsAppLink } from '../../../../src/js/modules/contact.js';
+import { SERVICES } from './services.js';
+import { buildWhatsAppLink } from './contact.js';
+
 
 // Util: prefijo de rutas (igual criterio que usas en otros módulos)
 function basePrefix() {
