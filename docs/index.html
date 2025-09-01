@@ -16,11 +16,12 @@
   <meta name="theme-color" content="#0f1115" />
   <link id="css-main" rel="stylesheet" />
 
-  <!-- OG (puedes dejarlos relativos; no afectan la carga de la página) -->
-  <meta property="og:title" content="AIR" />
-  <meta property="og:description" content="Su auto va a quedar JOYA" />
-  <meta property="og:image" content="./assets/img/logo.svg" />
-  <meta property="og:type" content="website" />
+ 
+  <!-- Open Graph Meta Tags OG-->
+         <meta property="og:title" content="AIR – Service">
+         <!-- <meta property="og:image" content="https://crvrnoname.github.io/AVSB/public/assets/images/logos/logo.png"> -->
+          <meta id="og-image" property="og:image" content="">
+   
 
   <!-- Bootstrap de rutas: decide prefijo y asigna href de CSS/JS/Favicon -->
   <script>
@@ -49,6 +50,7 @@
       setHref('icon-svg',      '/assets/img/favicon.svg');
       setHref('icon-shortcut', '/assets/img/favicon.svg');
       setHref('css-main',      '/assets/css/main.css');
+      setContent('og-image', '/assets/img/favicon.svg')
 
       // 2) Inyecta main.js (ESM) con el mismo prefijo
       const s = document.createElement('script');

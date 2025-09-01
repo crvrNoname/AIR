@@ -62,19 +62,20 @@ const MOBILE_ANGLES = {
 // Inserta SVG de líneas
 function drawLines(svg, center, nodes) {
   const { width, height } = svg.getBoundingClientRect();
-  const cx = width / 2, cy = height / 2;
+  const cx = width / 2, cy = height / 2;   // ← centro del <svg> (x1,y1)
 
   nodes.forEach((n, idx) => {
     const el = document.querySelector(`.mindmap__node[data-idx="${idx}"]`);
     if (!el) return;
-    const r = svg.createSVGRect(); // no se usa, pero mantiene compatibilidad
-    const rect = el.getBoundingClientRect();
+
+    const rect  = el.getBoundingClientRect();
     const srect = svg.getBoundingClientRect();
 
-    // punto del nodo (centro del rect)
-    const x = rect.left - srect.left + rect.width/2;
-    const y = rect.top  - srect.top  + rect.height/2;
+    // centro del nodo (x2,y2)
+    const x = rect.left - srect.left + rect.width  / 2;
+    const y = rect.top  - srect.top  + rect.height / 2;
 
+    // aquí se crea la línea y se agrega al <svg>
     const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     line.classList.add('mindmap__line');
     line.dataset.idx = String(idx);
@@ -85,6 +86,7 @@ function drawLines(svg, center, nodes) {
     svg.appendChild(line);
   });
 }
+
 
 // Modal accesible
 function mountModal() {

@@ -598,8 +598,15 @@ a:hover {
   aspect-ratio: 1/1;
   margin: 3px auto;
   isolation: isolate;
-  --r-min: 40vmin; /* mínimo del radio */
-  --r-max: 40vmin; /* máximo del radio */
+  /* —— Tokens coherentes —— */
+  --center: clamp(140px, 26vmin, 220px); /* tamaño fijo del centro */
+  --gap: 14px; /* separación desde el borde del centro */
+  /* radio base: borde del centro + gap + “órbita” configurable */
+  --orbit: 12vmin; /* cuánto quieres “sacar” los nodos */
+  --r: calc((var(--center) / 2) + var(--gap) + var(--orbit));
+  /* límites para el clamp (mín en el borde del centro, máx para evitar salir del canvas) */
+  --r-min: calc((var(--center) / 2) + var(--gap));
+  --r-max: calc((var(--center) / 2) + 42vmin); /* ajusta 42vmin si quieres más/menos margen */
 }
 
 /* Líneas radiales */
@@ -622,7 +629,7 @@ a:hover {
   stroke: var(--accent);
 }
 
-/* Centro (circular, absoluto) */
+/* Centro: usa el token --center para mantener coherencia con los radios */
 .mindmap__center {
   position: absolute;
   inset: 50% auto auto 50%;
@@ -630,13 +637,13 @@ a:hover {
   background: var(--card-bg);
   border: 1px solid var(--card-bd);
   color: var(--fg);
-  border-radius: 999px;
-  width: auto;
-  height: auto;
+  border-radius: 14px;
+  width: clamp(64px, 7vmin, 72px);
+  height: clamp(64px, 7vmin, 72px);
   display: grid;
   place-items: center;
   text-align: center;
-  padding: 1.5%;
+  padding: 0; /* el tamaño ya lo fija --center */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
@@ -646,25 +653,14 @@ a:hover {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
 }
 
-.mindmap__center h3 {
-  margin: 8px 0 4px;
-  font-size: 1.05rem;
-}
-
-.mindmap__center p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
 /* Nodos posicionados en anillo */
 .mindmap__node {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  --r: 36vmin; /* radio */
-  --a: 0deg; /* ángulo */
+  /* ángulo y radio; el ángulo viene de JS con --a, el radio usa el clamp coherente */
+  --a: 0deg;
   transform: translate(-50%, -50%) rotate(var(--a)) translate(clamp(var(--r-min), var(--r), var(--r-max))) rotate(calc(-1 * var(--a)));
   background: var(--card-bg);
   border: 1px solid var(--card-bd);
@@ -691,7 +687,7 @@ a:hover {
   line-height: 0;
 }
 
-/* pastilla del icono, monocromo y temable */
+/* pastilla/icono */
 .mindmap__icon {
   inline-size: clamp(56px, 7vmin, 72px);
   block-size: clamp(56px, 7vmin, 72px);
@@ -702,7 +698,7 @@ a:hover {
   background: var(--card-bg);
   border: 1px solid var(--card-bd);
   box-sizing: border-box;
-  color: var(--fg); /* el svg hereda este color */
+  color: var(--fg);
 }
 
 .mindmap__icon svg {
@@ -718,7 +714,7 @@ a:hover {
   stroke-linejoin: round;
 }
 
-/* Tooltip/título (desktop: oculto por defecto) */
+/* Tooltip/título */
 .mindmap__label {
   position: absolute;
   left: 50%;
