@@ -1,5 +1,6 @@
 // src/js/modules/theme.js
 const THEME_KEY = 'mi-sitio:theme';
+// Si tu tema base es Scania + su dark, conviene partir en 'scania'
 const DEFAULT_THEME = 'scania';
 
 // Prefijo correcto (local: relativo . / .. ; Pages: /REPO)
@@ -41,13 +42,11 @@ export function applyTheme(theme) {
     meta.setAttribute('content', bg);
   }
 
-  // actualizar favicon + logos + whatsapp FAB icon
+  // actualizar favicon + logos + íconos dependientes de tema
   updateFaviconForTheme(t);
   updateLogosForTheme(t);
   updateWhatsappFabForTheme(t);
   updateThemeToggleIcons(t);
-
-   updateHeaderWhatsAppColors(t);
 }
 
 export function initThemeSwitcher() {
@@ -66,7 +65,7 @@ export function initThemeSwitcher() {
   });
 }
 
-// 🔗 favicon por tema (usa mismo prefijo que CSS/JS)
+// 🔗 favicon por tema
 function updateFaviconForTheme(theme) {
   let link = document.querySelector('link[rel="icon"][type="image/svg+xml"]')
            || document.querySelector('link[rel="icon"]');
@@ -82,9 +81,10 @@ function updateFaviconForTheme(theme) {
     actual:    `${base}/assets/img/favicon.svg`,
     propuesta: `${base}/assets/img/favicon-dark.svg`,
     scania:    `${base}/assets/img/favicon-scania.svg`,
+    'scania-dark': `${base}/assets/img/favicon-scania.svg`, // mismo svg si no tienes variante
   };
 
-  const href = (map[theme] || map.actual) + `?v=${Date.now()}`; // cache-busting
+  const href = (map[theme] || map.scania) + `?v=${Date.now()}`;
   link.href = href;
 
   let shortcut = document.querySelector('link[rel="shortcut icon"]');
@@ -96,52 +96,41 @@ function updateFaviconForTheme(theme) {
   shortcut.href = href;
 }
 
-// 🖼️ logos por tema (nombres: logo.svg, logo-dark.svg, logo-scania.svg)
+// 🖼️ logos por tema (logo.svg, logo-dark.svg, logo-scania.svg opcional)
 function updateLogosForTheme(theme) {
   const base = getBasePrefix();
   const suffix = theme === 'propuesta' ? '-dark'
                : theme === 'scania'    ? '-scania'
+               : theme === 'scania-dark' ? '-scania' // usa mismo si no hay dark dedicado
                : '';
   const url = `${base}/assets/img/logo${suffix}.svg`;
   document.querySelectorAll('img.js-logo').forEach(img => {
-    // conserva dimensiones; solo cambia src (con cache-busting opcional)
     img.setAttribute('src', url + `?v=${Date.now()}`);
   });
 
-  // opcional: actualiza también la imagen Open Graph
+  // opcional: Open Graph
   const og = document.querySelector('meta[property="og:image"]');
   if (og) og.setAttribute('content', url);
 }
 
-// 💬 WhatsApp FAB + FloatBar icon por tema
-// Espera:
-//  - docs/assets/img/float/wspScania.svg      (tema claro)
-//  - docs/assets/img/float/wspScaniaDark.svg  (tema oscuro)
+// 💬 WhatsApp FAB + FloatingBar icon por tema
 function updateWhatsappFabForTheme(theme) {
   const base = getBasePrefix();
   const map = {
-    scania:       `${base}/assets/img/float/wspScaniaDark.svg`,
-    'scania-dark':`${base}/assets/img/float/wspScania.svg`,
+    scania:        `${base}/assets/img/float/wspScaniaDark.svg`, // claro
+    'scania-dark': `${base}/assets/img/float/wspScania.svg`,     // oscuro
   };
 
-  
-
-  // targets posibles: el botón flotante antiguo (#waFloat) y el de la floating-bar (#waFloatBar)
   ['waFloat', 'waFloatBar'].forEach(id => {
     const a = document.getElementById(id);
     if (!a) return;
-
     const img = a.querySelector('img');
     if (!img) return;
-
-    const url = map[theme] || map['scania'];
-    img.src = `${url}?v=${Date.now()}`;
+    img.src = `${map[theme] || map['scania']}?v=${Date.now()}`;
   });
 }
 
-// ☀️🌙 Sun/Moon icons por tema
-// Espera en docs/assets/img/float/:
-//   sun.svg, sunDark.svg, moon.svg, moonDark.svg
+// ☀️🌙 Sol/Luna por tema (imágenes)
 function updateThemeToggleIcons(theme) {
   const base = getBasePrefix();
   const map = {
@@ -155,39 +144,17 @@ function updateThemeToggleIcons(theme) {
     }
   };
 
-  const config = map[theme] || map['scania'];
+  const cfg = map[theme] || map['scania'];
 
-  const sunBtn = document.getElementById('btnThemeSun');
+  const sunBtn  = document.getElementById('btnThemeSun');
+  const moonBtn = document.getElementById('btnThemeMoon');
+
   if (sunBtn) {
     const img = sunBtn.querySelector('img');
-    if (img) img.src = `${config.sun}?v=${Date.now()}`;
+    if (img) img.src = `${cfg.sun}?v=${Date.now()}`;
   }
-
-  const moonBtn = document.getElementById('btnThemeMoon');
   if (moonBtn) {
     const img = moonBtn.querySelector('img');
-    if (img) img.src = `${config.moon}?v=${Date.now()}`;
+    if (img) img.src = `${cfg.moon}?v=${Date.now()}`;
   }
 }
-
-
-// Cambia SOLO el color del texto del botón WhatsApp del header
-function updateHeaderWhatsAppColors(theme) {
-  const btn = document.getElementById('ctaWhatsAppHeader');
-  if (!btn) return;
-
-  // ⚠️ Solo letras: cambiamos la var --wa-fg en el botón (no tocamos --wa-bg)
-  if (theme === 'scania-dark') {
-    // Modo oscuro → letras AZULES
-    btn.style.setProperty('--wa-fg', '#041E42');
-      // fondo blanco en oscuro
-  btn.style.setProperty('--wa-bg', '#FAFAFA');
-  } else {
-    // Modo claro → letras BLANCAS
-    btn.style.setProperty('--wa-fg', '#FAFAFA');
-      // fondo azul en claro
-  btn.style.setProperty('--wa-bg', '#041E42');
-  }
-}
-
-

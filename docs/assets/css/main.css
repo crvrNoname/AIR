@@ -591,16 +591,18 @@ a:hover {
   -webkit-filter: drop-shadow(0 0 6px var(--wa-dropshadow));
 }
 
-/* ===================== Mind Map (clean) ===================== */
+/* ===================== Mind Map ===================== */
 .mindmap {
   position: relative;
   width: min(900px, 100%);
   aspect-ratio: 1/1;
-  margin: 24px auto;
+  margin: 3px auto;
   isolation: isolate;
+  --r-min: 40vmin; /* mínimo del radio */
+  --r-max: 40vmin; /* máximo del radio */
 }
 
-/* capa para líneas */
+/* Líneas radiales */
 .mindmap__svg {
   position: absolute;
   inset: 0;
@@ -620,7 +622,7 @@ a:hover {
   stroke: var(--accent);
 }
 
-/* Centro */
+/* Centro (circular, absoluto) */
 .mindmap__center {
   position: absolute;
   inset: 50% auto auto 50%;
@@ -629,13 +631,13 @@ a:hover {
   border: 1px solid var(--card-bd);
   color: var(--fg);
   border-radius: 999px;
-  width: clamp(160px, 26vmin, 220px);
-  height: clamp(160px, 26vmin, 220px);
+  width: auto;
+  height: auto;
   display: grid;
   place-items: center;
   text-align: center;
-  padding: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); /* <— usa el token SASS */
+  padding: 1.5%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
 
@@ -655,7 +657,7 @@ a:hover {
   font-size: 0.9rem;
 }
 
-/* Base “card” (si alguna vez quieres volver a nodos con texto) */
+/* Nodos posicionados en anillo */
 .mindmap__node {
   position: absolute;
   left: 50%;
@@ -663,19 +665,13 @@ a:hover {
   transform: translate(-50%, -50%);
   --r: 36vmin; /* radio */
   --a: 0deg; /* ángulo */
-  transform: translate(-50%, -50%) rotate(var(--a)) translate(var(--r)) rotate(calc(-1 * var(--a)));
-  width: clamp(120px, 18vmin, 160px);
+  transform: translate(-50%, -50%) rotate(var(--a)) translate(clamp(var(--r-min), var(--r), var(--r-max))) rotate(calc(-1 * var(--a)));
   background: var(--card-bg);
   border: 1px solid var(--card-bd);
   border-radius: 14px;
-  padding: 10px 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   user-select: none;
-  display: grid;
-  grid-template-columns: 36px 1fr;
-  align-items: center;
-  gap: 8px;
   transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -684,18 +680,15 @@ a:hover {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
 }
 
-/* ===== Modo icon-only (sin texto permanente) ===== */
+/* ===== Modo icon-only ===== */
 .mindmap__node--icon {
-  /* anula layout “card” */
   width: clamp(56px, 7vmin, 72px);
   height: clamp(56px, 7vmin, 72px);
   padding: 0;
   display: grid;
   place-items: center;
-  grid-template-columns: none;
-  gap: 0;
   border-radius: 14px;
-  line-height: 0; /* quita baseline */
+  line-height: 0;
 }
 
 /* pastilla del icono, monocromo y temable */
@@ -713,7 +706,7 @@ a:hover {
 }
 
 .mindmap__icon svg {
-  display: block; /* quita espacio de línea */
+  display: block;
   width: 64%;
   height: 64%;
   overflow: visible;
@@ -725,7 +718,7 @@ a:hover {
   stroke-linejoin: round;
 }
 
-/* Tooltip título (oculto por defecto) */
+/* Tooltip/título (desktop: oculto por defecto) */
 .mindmap__label {
   position: absolute;
   left: 50%;
@@ -745,48 +738,12 @@ a:hover {
   z-index: 2;
 }
 
-/* Mostrar tooltip con hover o por tap (data flag) */
 .mindmap__node--icon:hover .mindmap__label,
 .mindmap__node--icon[data-show-label="1"] .mindmap__label {
   display: block;
 }
 
-/* realce del nodo al pasar/tocar */
-.mindmap__node--icon:hover,
-.mindmap__node--icon[data-show-label="1"] {
-  border-color: var(--accent);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
-}
-
-/* Mobile */
-@media (max-width: 700px) {
-  .mindmap {
-    aspect-ratio: auto;
-  }
-  .mindmap__svg {
-    display: none;
-  }
-  .mindmap__center {
-    position: static;
-    width: 100%;
-    height: auto;
-    border-radius: 16px;
-    transform: none;
-    inset: auto;
-  }
-  .mindmap__node {
-    position: static;
-    width: 100%;
-    transform: none;
-    margin-top: 12px;
-  }
-  /* icon-only: que no se estire a 100% al hacerse estático */
-  .mindmap__node--icon {
-    margin: 10px auto 0;
-    width: clamp(64px, 12vw, 76px);
-    height: clamp(64px, 12vw, 76px);
-  }
-}
+/* ===================== Mobile (≤700px) ===================== */
 /* ===================== Modal ===================== */
 .mm-modal {
   position: fixed;
@@ -889,8 +846,8 @@ a:hover {
 /* ===== Mindmap: versión icon-only ===== */
 .mindmap__node--icon {
   /* tamaño compacto y armonioso */
-  width: clamp(56px, 7vmin, 72px);
-  height: clamp(56px, 7vmin, 72px);
+  width: clamp(64px, 7vmin, 72px);
+  height: clamp(64px, 7vmin, 72px);
   border-radius: 14px;
   display: grid;
   place-items: center;

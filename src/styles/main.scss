@@ -263,16 +263,18 @@ a:hover { text-decoration: underline; }
   }
 }
 
-/* ===================== Mind Map (clean) ===================== */
+/* ===================== Mind Map ===================== */
 .mindmap {
   position: relative;
   width: min(900px, 100%);
   aspect-ratio: 1/1;
-  margin: 24px auto;
+  margin: 3px auto;
   isolation: isolate;
+   --r-min: 40vmin;   /* mínimo del radio */
+  --r-max: 40vmin;   /* máximo del radio */
 }
 
-/* capa para líneas */
+/* Líneas radiales */
 .mindmap__svg {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
@@ -286,7 +288,7 @@ a:hover { text-decoration: underline; }
 .mindmap__line.is-hover,
 .mindmap__line.is-active { stroke: var(--accent); }
 
-/* Centro */
+/* Centro (circular, absoluto) */
 .mindmap__center {
   position: absolute; inset: 50% auto auto 50%;
   transform: translate(-50%,-50%);
@@ -294,19 +296,19 @@ a:hover { text-decoration: underline; }
   border: 1px solid var(--card-bd);
   color: var(--fg);
   border-radius: 999px;
-  width: clamp(160px, 26vmin, 220px);
-  height: clamp(160px, 26vmin, 220px);
+  width: auto;
+  height: auto;
   display: grid; place-items: center;
   text-align: center;
-  padding: 12px;
-  box-shadow: v.$shadow; /* <— usa el token SASS */
+  padding: 1.5%;
+  box-shadow: v.$shadow;
   cursor: pointer;
 }
 .mindmap__center:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(0,0,0,.18); }
 .mindmap__center h3 { margin: 8px 0 4px; font-size: 1.05rem; }
 .mindmap__center p  { margin: 0; color: var(--muted); font-size: .9rem; }
 
-/* Base “card” (si alguna vez quieres volver a nodos con texto) */
+/* Nodos posicionados en anillo */
 .mindmap__node {
   position: absolute; left: 50%; top: 50%;
   transform: translate(-50%,-50%);
@@ -315,38 +317,27 @@ a:hover { text-decoration: underline; }
   transform:
     translate(-50%, -50%)
     rotate(var(--a))
-    translate(var(--r))
+       translate(clamp(var(--r-min), var(--r), var(--r-max)))
     rotate(calc(-1 * var(--a)));
-
-  width: clamp(120px, 18vmin, 160px);
   background: var(--card-bg);
   border: 1px solid var(--card-bd);
   border-radius: 14px;
-  padding: 10px 12px;
   box-shadow: v.$shadow;
   cursor: pointer;
   user-select: none;
-
-  display: grid;
-  grid-template-columns: 36px 1fr;
-  align-items: center;
-  gap: 8px;
   transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
 }
 .mindmap__node:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(0,0,0,.18); }
 
-/* ===== Modo icon-only (sin texto permanente) ===== */
+/* ===== Modo icon-only ===== */
 .mindmap__node--icon {
-  /* anula layout “card” */
   width: clamp(56px, 7vmin, 72px);
   height: clamp(56px, 7vmin, 72px);
   padding: 0;
   display: grid;
   place-items: center;
-  grid-template-columns: none;
-  gap: 0;
   border-radius: 14px;
-  line-height: 0; /* quita baseline */
+  line-height: 0;
 }
 
 /* pastilla del icono, monocromo y temable */
@@ -362,7 +353,7 @@ a:hover { text-decoration: underline; }
   color: var(--fg);              /* el svg hereda este color */
 }
 .mindmap__icon svg {
-  display: block;                /* quita espacio de línea */
+  display: block;
   width: 64%; height: 64%;
   overflow: visible;
   vector-effect: non-scaling-stroke;
@@ -373,7 +364,7 @@ a:hover { text-decoration: underline; }
   stroke-linejoin: round;
 }
 
-/* Tooltip título (oculto por defecto) */
+/* Tooltip/título (desktop: oculto por defecto) */
 .mindmap__label {
   position: absolute;
   left: 50%;
@@ -391,39 +382,107 @@ a:hover { text-decoration: underline; }
   pointer-events: none;
   z-index: 2;
 }
-
-/* Mostrar tooltip con hover o por tap (data flag) */
 .mindmap__node--icon:hover .mindmap__label,
-.mindmap__node--icon[data-show-label="1"] .mindmap__label {
-  display: block;
-}
+.mindmap__node--icon[data-show-label="1"] .mindmap__label { display: block; }
 
-/* realce del nodo al pasar/tocar */
-.mindmap__node--icon:hover,
-.mindmap__node--icon[data-show-label="1"] {
-  border-color: var(--accent);
-  box-shadow: 0 8px 20px rgba(0,0,0,.18);
-}
+/* ===================== Mobile (≤700px) ===================== */
+// @media (max-width: 700px) {
+//   /* mantenemos radial, pero ajustamos proporciones para evitar colapso */
+//   .mindmap {
+//     aspect-ratio: 1 / 1;
+//     width: min(680px, 100%);   /* ancho máx razonable */
+//     padding: 8px;
+//     position: relative;
+//   }
+//    .mindmap__svg {
+//     position: absolute;
+//     inset: 0;
+//     width: 100%;
+//     height: 100%;
+//     pointer-events: none;
+//     display: block;
+//   }
 
-/* Mobile */
-@media (max-width: 700px) {
-  .mindmap { aspect-ratio: auto; }
-  .mindmap__svg { display: none; }
-  .mindmap__center {
-    position: static; width: 100%; height: auto; border-radius: 16px;
-    transform: none; inset: auto;
-  }
-  .mindmap__node {
-    position: static; width: 100%;
-    transform: none; margin-top: 12px;
-  }
-  /* icon-only: que no se estire a 100% al hacerse estático */
-  .mindmap__node--icon {
-    margin: 10px auto 0;
-    width: clamp(64px, 12vw, 76px);
-    height: clamp(64px, 12vw, 76px);
-  }
-}
+//  .mindmap__center {
+//     position: absolute;
+//     inset: 50% auto auto 50%;
+//     transform: translate(-50%, -50%);
+//     width: clamp(100px, 70vw, 100px);
+//     height: clamp(100px, 70vw, 100px);
+//     border-radius: 20px;
+//     display: grid;
+//     place-items: center;
+//     text-align: center;
+//     // padding: 14px;
+//     padding: 0%;
+//     margin: 0 auto;
+//   }
+
+//    /* icono dentro del centro, un poco más grande */
+//   .mindmap__center .mindmap__icon {
+//     inline-size: clamp(64px, 18vw, 96px);
+//     block-size: clamp(64px, 18vw, 96px);
+//   }
+//   .mindmap__center .mindmap__icon svg {
+//     width: 66%;
+//     height: 66%;
+//   }
+
+//   /* acercamos los nodos (casillas) al centro */
+//   .mindmap__node {
+//     /* radio de la órbita: desde el borde del centro hacia afuera */
+//     --r: calc( (min(25vw, 36px) / 2) + 18vw );
+//     width: clamp(64px, 18vw, 88px);
+//   }
+
+//   /* tamaño táctil del modo icon-only */
+//   .mindmap__node--icon {
+//     width: clamp(64px, 18vw, 88px);
+//     height: clamp(64px, 18vw, 88px);
+//     border-radius: 14px;
+//     padding: 0;
+//     display: grid;
+//     place-items: center;
+//     line-height: 0;
+//   }
+//   .mindmap__icon {
+//     inline-size: 72%;
+//     block-size: 72%;
+//   }
+//   .mindmap__icon svg {
+//     width: 64%;
+//     height: 64%;
+//   }
+//     /* si quieres ocultar el título “Diagnóstico” en mobile
+//      (se mostrará igual en el modal al tocar) */
+//   .mindmap__center h3 {
+//     display: none;
+//   }
+
+//   /* en mobile el título SIEMPRE visible bajo el icono */
+//   .mindmap__label {
+//     position: absolute;
+//     left: 50%;
+//     top: calc(100% + 6px);
+//     transform: translateX(-50%);
+//     display: block;
+//     background: transparent; border: 0; box-shadow: none;
+//     padding: 0;
+//     font-size: .85rem; font-weight: 600;
+//     color: var(--fg);
+//     white-space: nowrap;
+//     pointer-events: none;
+//     text-align: center;
+//   }
+
+//   /* realce más sutil en mobile */
+//   .mindmap__node--icon:hover,
+//   .mindmap__node--icon[data-show-label="1"] {
+//     border-color: var(--card-bd);
+//     box-shadow: 0 6px 14px rgba(0,0,0,.12);
+//   }
+// }
+
 
 
 /* ===================== Modal ===================== */
@@ -482,8 +541,8 @@ a:hover { text-decoration: underline; }
 /* ===== Mindmap: versión icon-only ===== */
 .mindmap__node--icon {
   /* tamaño compacto y armonioso */
-  width: clamp(56px, 7vmin, 72px);
-  height: clamp(56px, 7vmin, 72px);
+  width: clamp(64px, 7vmin, 72px);
+  height: clamp(64px, 7vmin, 72px);
   border-radius: 14px;
   display: grid;
   place-items: center;

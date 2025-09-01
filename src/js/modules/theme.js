@@ -1,6 +1,7 @@
 // src/js/modules/theme.js
 const THEME_KEY = 'mi-sitio:theme';
-const DEFAULT_THEME = 'actual';
+// Si tu tema base es Scania + su dark, conviene partir en 'scania'
+const DEFAULT_THEME = 'scania';
 
 // Prefijo correcto (local: relativo . / .. ; Pages: /REPO)
 function getBasePrefix() {
@@ -41,10 +42,11 @@ export function applyTheme(theme) {
     meta.setAttribute('content', bg);
   }
 
-  // actualizar favicon + logos + whatsapp FAB icon
+  // actualizar favicon + logos + íconos dependientes de tema
   updateFaviconForTheme(t);
   updateLogosForTheme(t);
   updateWhatsappFabForTheme(t);
+  updateThemeToggleIcons(t);
 }
 
 export function initThemeSwitcher() {
@@ -63,7 +65,7 @@ export function initThemeSwitcher() {
   });
 }
 
-// 🔗 favicon por tema (usa mismo prefijo que CSS/JS)
+// 🔗 favicon por tema
 function updateFaviconForTheme(theme) {
   let link = document.querySelector('link[rel="icon"][type="image/svg+xml"]')
            || document.querySelector('link[rel="icon"]');
@@ -79,9 +81,10 @@ function updateFaviconForTheme(theme) {
     actual:    `${base}/assets/img/favicon.svg`,
     propuesta: `${base}/assets/img/favicon-dark.svg`,
     scania:    `${base}/assets/img/favicon-scania.svg`,
+    'scania-dark': `${base}/assets/img/favicon-scania.svg`, // mismo svg si no tienes variante
   };
 
-  const href = (map[theme] || map.actual) + `?v=${Date.now()}`; // cache-busting
+  const href = (map[theme] || map.scania) + `?v=${Date.now()}`;
   link.href = href;
 
   let shortcut = document.querySelector('link[rel="shortcut icon"]');
@@ -93,38 +96,65 @@ function updateFaviconForTheme(theme) {
   shortcut.href = href;
 }
 
-// 🖼️ logos por tema (nombres: logo.svg, logo-dark.svg, logo-scania.svg)
+// 🖼️ logos por tema (logo.svg, logo-dark.svg, logo-scania.svg opcional)
 function updateLogosForTheme(theme) {
   const base = getBasePrefix();
   const suffix = theme === 'propuesta' ? '-dark'
                : theme === 'scania'    ? '-scania'
+               : theme === 'scania-dark' ? '-scania' // usa mismo si no hay dark dedicado
                : '';
   const url = `${base}/assets/img/logo${suffix}.svg`;
   document.querySelectorAll('img.js-logo').forEach(img => {
-    // conserva dimensiones; solo cambia src (con cache-busting opcional)
     img.setAttribute('src', url + `?v=${Date.now()}`);
   });
 
-  // opcional: actualiza también la imagen Open Graph
+  // opcional: Open Graph
   const og = document.querySelector('meta[property="og:image"]');
   if (og) og.setAttribute('content', url);
 }
 
-// 💬 WhatsApp FAB icon por tema
-// Archivos esperados en docs/assets/img/float/:
-//  - wsp-svgZip.svg        (actual)
-//  - wsp-svgZipDark.svg    (propuesta)
-//  - wsp-svgZipScania.svg  (scania)
+// 💬 WhatsApp FAB + FloatingBar icon por tema
 function updateWhatsappFabForTheme(theme) {
   const base = getBasePrefix();
-  const suffix = theme === 'propuesta' ? 'Dark'
-               : theme === 'scania'    ? 'Scania'
-               : '';
-  const a = document.getElementById('waFloat');
-  if (!a) return;
+  const map = {
+    scania:        `${base}/assets/img/float/wspScaniaDark.svg`, // claro
+    'scania-dark': `${base}/assets/img/float/wspScania.svg`,     // oscuro
+  };
 
-  const img = a.querySelector('img');
-  if (!img) return;
+  ['waFloat', 'waFloatBar'].forEach(id => {
+    const a = document.getElementById(id);
+    if (!a) return;
+    const img = a.querySelector('img');
+    if (!img) return;
+    img.src = `${map[theme] || map['scania']}?v=${Date.now()}`;
+  });
+}
 
-  img.src = `${base}/assets/img/float/wsp-svgZip${suffix}.svg?v=${Date.now()}`;
+// ☀️🌙 Sol/Luna por tema (imágenes)
+function updateThemeToggleIcons(theme) {
+  const base = getBasePrefix();
+  const map = {
+    scania: {
+      sun:  `${base}/assets/img/float/sunDark.svg`,
+      moon: `${base}/assets/img/float/moonDark.svg`,
+    },
+    'scania-dark': {
+      sun:  `${base}/assets/img/float/sun.svg`,
+      moon: `${base}/assets/img/float/moon.svg`,
+    }
+  };
+
+  const cfg = map[theme] || map['scania'];
+
+  const sunBtn  = document.getElementById('btnThemeSun');
+  const moonBtn = document.getElementById('btnThemeMoon');
+
+  if (sunBtn) {
+    const img = sunBtn.querySelector('img');
+    if (img) img.src = `${cfg.sun}?v=${Date.now()}`;
+  }
+  if (moonBtn) {
+    const img = moonBtn.querySelector('img');
+    if (img) img.src = `${cfg.moon}?v=${Date.now()}`;
+  }
 }
