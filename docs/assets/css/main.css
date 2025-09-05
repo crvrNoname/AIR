@@ -825,6 +825,7 @@ html[data-theme=scania] {
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  z-index: 2147483648;
 }
 
 .mm-media {
