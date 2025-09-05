@@ -93,6 +93,7 @@ function mountModal() {
   let modal = document.querySelector('.mm-modal');
   if (modal) return modal;
   modal = document.createElement('div');
+  el.style.zIndex = '2147483648';  
   modal.className = 'mm-modal';
   modal.innerHTML = `
     <div class="mm-backdrop" data-close></div>
