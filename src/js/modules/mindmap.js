@@ -177,6 +177,29 @@ center.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal({ id:'scanner', title:'OBD / Scanner' }, phone); }
 });
 
+center.addEventListener('pointerenter', () => showPortalFor(center));
+center.addEventListener('pointerleave', () => hidePortal());
+center.addEventListener('pointerup', () => {
+  const now = Date.now();
+  center._lastTap = center._lastTap || 0;
+  if (now - center._lastTap > 800) {
+    showPortalFor(center);
+    center._lastTap = now;
+  } else {
+    hidePortal();
+    openModal({ id:'scanner', title:'OBD / Scanner' }, phone);
+  }
+});
+center.addEventListener('focusin',  () => showPortalFor(center));
+center.addEventListener('focusout', () => hidePortal());
+
+
+document.addEventListener('pointerdown', (e) => {
+  if (!e.target.closest('.mindmap__node') && !e.target.closest('.mindmap__center')) {
+    hidePortal();
+  }
+}, { passive: true });
+
   // Crea nodos alrededor
   NODES.forEach((n, idx) => {
     const el = document.createElement('button');
@@ -197,23 +220,36 @@ el.setAttribute('title', n.title);               // tooltip nativo opcional
 el.innerHTML = `
   <span class="mindmap__icon">${iconSVG(iconName)}</span>
   <span class="mindmap__label" role="tooltip">${n.title}</span>
-`;
-let lastTap = 0; // control por-nodo
+  `;
+let lastTap = 0;
 
-// 1er tap: muestra etiqueta; 2º tap (<800ms): abre modal
-el.addEventListener('pointerup', (ev) => {
+// Hover/focus (desktop & teclado)
+el.addEventListener('pointerenter', () => showPortalFor(el));
+el.addEventListener('pointerleave', () => hidePortal());
+el.addEventListener('focusin',      () => showPortalFor(el));
+el.addEventListener('focusout',     () => hidePortal());
+
+// Tacto: 1º tap muestra label (portal); 2º tap (<800ms) abre modal
+el.addEventListener('pointerup', () => {
   const now = Date.now();
   if (now - lastTap > 800) {
-    // ocultar etiquetas previas
-    root.querySelectorAll('.mindmap__node--icon[data-show-label="1"]')
-        .forEach(n => n.removeAttribute('data-show-label'));
-    // mostrar la de este nodo
-    el.setAttribute('data-show-label', '1');
+    showPortalFor(el);
     lastTap = now;
   } else {
+    hidePortal();
     openModal(n, phone);
   }
 });
+
+// Accesibilidad teclado
+el.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    hidePortal();
+    openModal(n, phone);
+  }
+});
+
 
 // Accesibilidad teclado (Enter/Espacio → abrir modal)
 el.addEventListener('keydown', (e) => {
@@ -258,6 +294,60 @@ document.addEventListener('pointerdown', (e) => {
 
   
 }
+
+
+// === Tooltip global (portal al <body>) ======================================
+let MM_PORTAL = null;
+let MM_ANCHOR = null; // el nodo al que está "pegado" el portal
+
+function ensurePortal() {
+  if (MM_PORTAL) return MM_PORTAL;
+  const el = document.createElement('div');
+  el.className = 'mm-tip';
+  el.setAttribute('role', 'tooltip');
+  el.style.position = 'fixed';
+  el.style.zIndex = '2147483647';       // sobre TODO
+  el.style.pointerEvents = 'none';
+  el.style.visibility = 'hidden';
+  document.body.appendChild(el);
+  MM_PORTAL = el;
+
+  // Reposicionar cuando cambie el viewport/scroll
+  ['scroll','resize'].forEach(evt => {
+    window.addEventListener(evt, () => { if (MM_ANCHOR) positionPortal(MM_ANCHOR); }, { passive: true });
+  });
+  return el;
+}
+
+function positionPortal(anchorEl) {
+  if (!MM_PORTAL) return;
+  const r = anchorEl.getBoundingClientRect();
+  const x = r.left + r.width / 2;
+  const y = r.bottom + 8; // 8px debajo del nodo
+  MM_PORTAL.style.left = `${x}px`;
+  MM_PORTAL.style.top  = `${y}px`;
+  MM_PORTAL.style.transform = 'translate(-50%,0)';
+}
+
+function showPortalFor(anchorEl) {
+  const label = anchorEl.querySelector('.mindmap__label');
+  const text  = label?.textContent?.trim() || anchorEl.getAttribute('title') || anchorEl.getAttribute('aria-label') || '';
+  if (!text) return;
+
+  const tip = ensurePortal();
+  tip.textContent = text;
+  tip.classList.add('mm-tip--accent'); // color acento; quítalo si no lo quieres siempre
+  MM_ANCHOR = anchorEl;
+  positionPortal(anchorEl);
+  tip.style.visibility = 'visible';
+}
+
+function hidePortal() {
+  if (!MM_PORTAL) return;
+  MM_PORTAL.style.visibility = 'hidden';
+  MM_ANCHOR = null;
+}
+
 
 // ── Íconos monocromos (SVG inline, usan currentColor) ─────────────────────────
 function iconSVG(name) {

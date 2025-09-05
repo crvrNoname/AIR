@@ -269,6 +269,7 @@ a:hover { text-decoration: underline; }
   width: min(900px, 100%);
   aspect-ratio: 1 / 1;
   margin: 3px auto;
+  overflow: visible;
   isolation: isolate;
 
   /* —— Tokens coherentes —— */
@@ -340,6 +341,10 @@ a:hover { text-decoration: underline; }
   cursor: pointer;
   user-select: none;
   transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+
+    /* Por defecto, usa el color de texto global; puedes sobreescribirlo por nodo si quieres */
+  --node-fg: var(--fg);
+  color: var(--node-fg); 
 }
 .mindmap__node:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(0,0,0,.18); }
 
@@ -382,26 +387,95 @@ a:hover { text-decoration: underline; }
 
 /* Tooltip/título */
 .mindmap__label {
-  position: absolute;
-  left: 50%;
-  top: calc(100% + 8px);
-  transform: translateX(-50%);
-  white-space: nowrap;
-  background: var(--card-bg);
-  border: 1px solid var(--card-bd);
-  color: var(--fg);
-  padding: 6px 8px;
+  // position: absolute;
+  // left: 50%;
+  // top: calc(100% + 8px);
+  // transform: translateX(-50%);
+  // white-space: nowrap;
+  // background: var(--card-bg);
+  // border: 1px solid var(--card-bd);
+  // color: var(--fg);
+  // padding: 6px 8px;
+  // border-radius: 8px;
+  // box-shadow: v.$shadow;
+  // font-size: .9rem;
+  // font-weight: 600;
+  // display:block;
+  // pointer-events: none;
+  // z-index: 3;
+
+   display: none !important;
+}
+
+// CSS Etiquetas
+/* Si algún tema requiere ajuste fino, se puede “retocar” aquí */
+html[data-theme="propuesta"] {
+  /* ejemplo: leve mezcla para mejorar contraste en oscuro */
+  --tip-bg: color-mix(in oklab, var(--card-bg) 92%, var(--accent) 8%);
+  --tip-bd: color-mix(in oklab, var(--card-bd) 85%, var(--accent) 15%);
+}
+html[data-theme="scania"] {
+  /* ejemplo: más claro en tema claro */
+  --tip-bg: color-mix(in oklab, var(--card-bg) 96%, white 4%);
+  --tip-bd: var(--card-bd);
+}
+
+/* Tooltip global portaleado al <body> */
+.mm-tip {
+  // position: fixed;
+  // z-index: 2147483647;      /* por encima de todo */
+  // background: var(--card-bg);
+  // border: 1px solid var(--card-bd);
+  // color: var(--fg);
+  // padding: 6px 8px;
+  // border-radius: 8px;
+  // box-shadow: var(--shadow, 0 6px 16px rgba(0,0,0,.18));
+  // font-size: .9rem;
+  // font-weight: 700;
+  // white-space: nowrap;
+  // pointer-events: none;
+    position: fixed;
+  z-index: 2147483647;
+  background: var(--tip-bg);
+  border: 1px solid var(--tip-bd);
+  color: var(--tip-fg);
+  padding: 3px 5px;
   border-radius: 8px;
-  box-shadow: v.$shadow;
+  box-shadow: var(--tip-shadow);
   font-size: .9rem;
-  font-weight: 600;
-  display: none;
+  font-weight: 700;
+  white-space: nowrap;
   pointer-events: none;
-  z-index: 2;
+  mix-blend-mode: normal; /* evita rarezas con fondos */
+  transition: background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+}
+
+
+/* Variante acento (la activa el JS con .mm-tip--accent en hover/tap) */
+.mm-tip--accent {
+  color: var(--accent);
+  border-color: var(--accent);
+  /* si quieres resaltar el fondo con una pizca del acento */
+  // background: var(--card-bd);
+}
+
+/* Opcional: cuando el nodo/centro está hover, el ícono también refleja el acento */
+.mindmap__node--icon:hover .mindmap__icon,
+.mindmap__node--icon[data-show-label="1"] .mindmap__icon,
+.mindmap__center:hover .mindmap__icon {
+  border-color: var(--accent);
+  color: var(--accent);
+  transition: color .2s ease, border-color .2s ease;
+}
+
+.mm-tip--accent {
+  color: var(--card-l);
+  border-color: var(--accent);
 }
 .mindmap__node--icon:hover .mindmap__label,
 .mindmap__node--icon[data-show-label="1"] .mindmap__label {
   display: block;
+  color: var(--wa-bg);
 }
 
 
@@ -599,7 +673,7 @@ a:hover { text-decoration: underline; }
   transform: translateX(-50%);
   white-space: nowrap;
   background: var(--card-bg);
-  border: 1px solid var(--card-bd);
+  border: 1px solid var(--accent);
   color: var(--fg);
   padding: 6px 8px;
   border-radius: 8px;
@@ -644,14 +718,14 @@ a:hover { text-decoration: underline; }
 }
 
 .mindmap__icon svg{
-  display: block;          /* quita espacio de línea */
-  width: 64%;
-  height: 64%;
-  overflow: visible;
-  vector-effect: non-scaling-stroke;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  // display: block;          /* quita espacio de línea */
+  // width: 64%;
+  // height: 64%;
+  // overflow: visible;
+  // vector-effect: non-scaling-stroke;
+  // stroke: currentColor;
+  // fill: none;
+  // stroke-width: 1.9;
+  // stroke-linecap: round;
+  // stroke-linejoin: round;
 }

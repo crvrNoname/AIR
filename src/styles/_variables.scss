@@ -43,6 +43,7 @@ html[data-theme="scania"] {
   --card-bg: #FFFFFF;
   --card-bd: #C8C9C7;
   --btn-fg: #FAFAFA;
+  --card-l:#041E42;
 
    --wa-bg: #041E42;                   /* Azul Scania */
   --wa-fg: #FAFAFA;
@@ -63,9 +64,20 @@ html[data-theme="scania-dark"] {
   --card-bg: #0F1629;   /* Tarjetas */
   --card-bd: #1C2541;   /* Bordes/sutiles */
   --btn-fg: #FAFAFA;    /* Texto en botones */
+  --card-l:#FAFAFA;
 
   /* WhatsApp FAB (consistente con marca) */
   --wa-bg: #041E42;                   /* Azul Scania */
   --wa-fg: #FAFAFA;
   --wa-dropshadow: rgba(240,240,240,.85);
+}
+
+
+/* === Tooltip global (portal) – themable === */
+:root {
+  /* tokens opcionales (se heredan del tema por defecto) */
+  --tip-bg: var(--card-bg);
+  --tip-bd: var(--card-bd);
+  --tip-fg: var(--fg);
+  --tip-shadow: var(--shadow, 0 6px 16px rgba(0,0,0,.18));
 }
