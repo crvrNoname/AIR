@@ -112,11 +112,16 @@ function mountModal() {
   modal.addEventListener('click', (e) => {
     if (e.target && (e.target.matches('[data-close]') || e.target.closest('[data-close]'))) {
       modal.removeAttribute('open');
+      document.documentElement.classList.remove('mm-open');
+hidePortal();
     }
   });
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') modal.removeAttribute('open');
-  });
+   if (e.key === 'Escape') {
+  modal.removeAttribute('open');
+  document.documentElement.classList.remove('mm-open');
+  hidePortal();
+}});
   return modal;
 }
 
@@ -134,6 +139,8 @@ function openModal(node, phone) {
 
   const text = encodeURIComponent(`Hola, quiero *${title}* luego de un diagnóstico con escáner.`);
   modal.querySelector('#mmWhatsapp').setAttribute('href', buildWhatsAppLink(phone, text));
+  document.documentElement.classList.add('mm-open');
+hidePortal(); // por si hubiera uno visible
   modal.setAttribute('open', '');
 }
 
@@ -279,7 +286,8 @@ document.addEventListener('pointerdown', (e) => {
   drawLines(svg, root.querySelector('.mindmap__center'), NODES);
 
   setupHoverLines(root);
-
+// Si el puntero sale del contenedor, oculta el tooltip (desktop)
+root.addEventListener('pointerleave', hidePortal);
   // Recalcular líneas al redimensionar
   let t;
   window.addEventListener('resize', () => {
@@ -299,6 +307,7 @@ document.addEventListener('pointerdown', (e) => {
 // === Tooltip global (portal al <body>) ======================================
 let MM_PORTAL = null;
 let MM_ANCHOR = null; // el nodo al que está "pegado" el portal
+let MM_HIDE_TIMER = null;
 
 function ensurePortal() {
   if (MM_PORTAL) return MM_PORTAL;
@@ -306,16 +315,20 @@ function ensurePortal() {
   el.className = 'mm-tip';
   el.setAttribute('role', 'tooltip');
   el.style.position = 'fixed';
-  el.style.zIndex = '2147483647';       // sobre TODO
+  el.style.zIndex = '900';           // 👈 debajo del modal
   el.style.pointerEvents = 'none';
   el.style.visibility = 'hidden';
   document.body.appendChild(el);
   MM_PORTAL = el;
 
-  // Reposicionar cuando cambie el viewport/scroll
-  ['scroll','resize'].forEach(evt => {
-    window.addEventListener(evt, () => { if (MM_ANCHOR) positionPortal(MM_ANCHOR); }, { passive: true });
+  // En móvil/desktop: si scrolleas o cambia la pestaña → ocultar
+  window.addEventListener('scroll', hidePortal, { passive: true });
+  window.addEventListener('resize', hidePortal, { passive: true });
+  window.addEventListener('blur', hidePortal,   { passive: true });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) hidePortal();
   });
+
   return el;
 }
 
@@ -330,24 +343,38 @@ function positionPortal(anchorEl) {
 }
 
 function showPortalFor(anchorEl) {
+  // Si hay modal abierto, nunca mostramos el tooltip
+  if (document.documentElement.classList.contains('mm-open')) return;
+
   const label = anchorEl.querySelector('.mindmap__label');
-  const text  = label?.textContent?.trim() || anchorEl.getAttribute('title') || anchorEl.getAttribute('aria-label') || '';
+  const text  = label?.textContent?.trim()
+             || anchorEl.getAttribute('title')
+             || anchorEl.getAttribute('aria-label')
+             || '';
   if (!text) return;
 
   const tip = ensurePortal();
   tip.textContent = text;
-  tip.classList.add('mm-tip--accent'); // color acento; quítalo si no lo quieres siempre
+  tip.classList.add('mm-tip--accent');
+
   MM_ANCHOR = anchorEl;
   positionPortal(anchorEl);
   tip.style.visibility = 'visible';
+
+  // Auto-ocultar en pantallas táctiles
+  clearTimeout(MM_HIDE_TIMER);
+  if (matchMedia('(pointer: coarse)').matches) {
+    MM_HIDE_TIMER = setTimeout(hidePortal, 1500);
+  }
 }
 
 function hidePortal() {
+  clearTimeout(MM_HIDE_TIMER);
+  MM_HIDE_TIMER = null;
   if (!MM_PORTAL) return;
   MM_PORTAL.style.visibility = 'hidden';
   MM_ANCHOR = null;
 }
-
 
 // ── Íconos monocromos (SVG inline, usan currentColor) ─────────────────────────
 function iconSVG(name) {

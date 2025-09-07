@@ -750,7 +750,7 @@ html[data-theme=scania] {
 /* Tooltip global portaleado al <body> */
 .mm-tip {
   position: fixed;
-  z-index: 2147483647;
+  z-index: 900;
   background: var(--tip-bg);
   border: 1px solid var(--tip-bd);
   color: var(--tip-fg);
@@ -761,8 +761,13 @@ html[data-theme=scania] {
   font-weight: 700;
   white-space: nowrap;
   pointer-events: none;
-  mix-blend-mode: normal; /* evita rarezas con fondos */
+  mix-blend-mode: normal;
   transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Con modal abierto, nunca mostrar tip */
+html.mm-open .mm-tip {
+  display: none !important;
 }
 
 /* Variante acento (la activa el JS con .mm-tip--accent en hover/tap) */
@@ -797,7 +802,7 @@ html[data-theme=scania] {
 .mm-modal {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 1000;
   display: none;
 }
 
@@ -816,16 +821,7 @@ html[data-theme=scania] {
   position: absolute;
   inset: 50% auto auto 50%;
   transform: translate(-50%, -50%);
-  width: min(920px, 92vw);
-  background: var(--card-bg);
-  border: 1px solid var(--card-bd);
-  color: var(--fg);
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  z-index: 2147483648;
+  z-index: 1001;
 }
 
 .mm-media {
@@ -976,6 +972,19 @@ html[data-theme=scania] {
   background: var(--card-bg);
   border: 1px solid var(--card-bd);
   box-sizing: border-box;
+}
+
+.mindmap__icon svg {
+  display: block; /* quita espacio de línea */
+  width: 64%;
+  height: 64%;
+  overflow: visible;
+  vector-effect: non-scaling-stroke;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /*# sourceMappingURL=main.css.map */

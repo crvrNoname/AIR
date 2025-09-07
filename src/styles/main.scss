@@ -435,7 +435,7 @@ html[data-theme="scania"] {
   // white-space: nowrap;
   // pointer-events: none;
     position: fixed;
-  z-index: 2147483647;
+  z-index: 900;                 // 👈 por debajo del modal (1000/1001)
   background: var(--tip-bg);
   border: 1px solid var(--tip-bd);
   color: var(--tip-fg);
@@ -446,9 +446,15 @@ html[data-theme="scania"] {
   font-weight: 700;
   white-space: nowrap;
   pointer-events: none;
-  mix-blend-mode: normal; /* evita rarezas con fondos */
+  mix-blend-mode: normal;
   transition: background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
 }
+
+/* Con modal abierto, nunca mostrar tip */
+html.mm-open .mm-tip { 
+  display: none !important; 
+}
+
 
 
 /* Variante acento (la activa el JS con .mm-tip--accent en hover/tap) */
@@ -581,26 +587,14 @@ html[data-theme="scania"] {
 
 /* ===================== Modal ===================== */
 .mm-modal {
-  position: fixed; inset: 0; z-index: 100;
-  display: none;
+  position: fixed; inset: 0; z-index: 1000; display: none;
 }
 .mm-modal[open] { display: block; }
-.mm-backdrop {
-  position: absolute; inset: 0; background: rgba(0,0,0,.55);
-  backdrop-filter: blur(2px);
-}
-.mm-dialog {
-  position: absolute; inset: 50% auto auto 50%;
-  transform: translate(-50%,-50%);
-  width: min(920px, 92vw);
-  background: var(--card-bg);
-  border: 1px solid var(--card-bd);
-  color: var(--fg);
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  display: grid; grid-template-columns: 1fr 1fr;
-}
+
+.mm-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.55); backdrop-filter: blur(2px); }
+.mm-dialog   { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%,-50%); z-index: 1001; }
+
+
 .mm-media { aspect-ratio: 4/3; width: 100%; height: 100%; object-fit: cover; }
 .mm-body { padding: 14px 16px; }
 .mm-title { margin: 0 0 6px; font-size: 1.15rem; }
@@ -718,14 +712,14 @@ html[data-theme="scania"] {
 }
 
 .mindmap__icon svg{
-  // display: block;          /* quita espacio de línea */
-  // width: 64%;
-  // height: 64%;
-  // overflow: visible;
-  // vector-effect: non-scaling-stroke;
-  // stroke: currentColor;
-  // fill: none;
-  // stroke-width: 1.9;
-  // stroke-linecap: round;
-  // stroke-linejoin: round;
+  display: block;          /* quita espacio de línea */
+  width: 64%;
+  height: 64%;
+  overflow: visible;
+  vector-effect: non-scaling-stroke;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
