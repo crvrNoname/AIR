@@ -44,6 +44,8 @@ html[data-theme="scania"] {
   --card-bd: #C8C9C7;
   --btn-fg: #FAFAFA;
   --card-l:#041E42;
+   --card-bg-t:#000000;
+   --card-t:#53565A; /*color testigo*/
 
    --wa-bg: #041E42;                   /* Azul Scania */
   --wa-fg: #FAFAFA;
@@ -54,7 +56,7 @@ html[data-theme="scania"] {
 html[data-theme="scania-dark"] {
   /* Identidad Scania, en dark */
   --brand: #041E42;     /* Azul Scania adaptado a dark */
-  --accent: #AE202B;    /* Rojo V8 (igual que claro) */
+  --accent: #AE202B;    /* HOVER testigo Rojo V8 (igual que claro) */
 
   --bg: #0B1220;        /* Fondo principal (navy oscuro) */
   --fg: #E6E8EB;        /* Texto */
@@ -65,6 +67,9 @@ html[data-theme="scania-dark"] {
   --card-bd: #1C2541;   /* Bordes/sutiles */
   --btn-fg: #FAFAFA;    /* Texto en botones */
   --card-l:#FAFAFA;
+  --card-bg-t:#000000; /*color fondo testigo*/
+  --card-t:#53565A; /*color testigo*/
+
 
   /* WhatsApp FAB (consistente con marca) */
   --wa-bg: #041E42;                   /* Azul Scania */

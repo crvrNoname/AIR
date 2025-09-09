@@ -38,18 +38,18 @@ function findService(id) {
 const NODES = [
   { id:'frenos',      title:'Frenos',         angle:   0 },
   { id:'suspension',  title:'Suspensión',     angle:  45 },
-  { id:'mantencion',  title:'Mantención',     angle:  90 },
+  { id:'lights',  title:'Luces',     angle:  90 },
   { id:'ac',          title:'Aire Acond.',    angle: 135 },
   { id:'embrague',    title:'Embrague',       angle: 180 },
   { id:'motor',       title:'Motor',          angle: 225 },
-  { id:'electricidad',title:'Electricidad',   angle: 270 },
+  { id:'electricidad',title:'Bateria',   angle: 270 },
   { id:'scanner',     title:'OBD / Scanner',  angle: 315 }, // también lo mostramos como nodo satélite
 ];
 
 const MOBILE_ANGLES = {
   frenos:  -10,
   suspension:  35,
-  mantencion:  80,
+  lights:  80,
   ac:      135,
   embrague:  200,
   motor:   250,
@@ -224,8 +224,9 @@ el.classList.add('mindmap__node--icon');        // ⬅️ modo icon-only
 el.setAttribute('aria-label', n.title);          // accesible
 el.setAttribute('title', n.title);               // tooltip nativo opcional
 
+// el.setAttribute('data-service', iconName);
 el.innerHTML = `
-  <span class="mindmap__icon">${iconSVG(iconName)}</span>
+  <span class="mindmap__icon mindmap__icon--${iconName}">${iconSVG(iconName)}</span>
   <span class="mindmap__label" role="tooltip">${n.title}</span>
   `;
 let lastTap = 0;
@@ -386,10 +387,27 @@ function iconSVG(name) {
         <path d="M8 16h8"/>
       </svg>`;
     case 'engine': return `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M4 10h8l2-2h4v8h-4l-2 2H4z"/>
-        <path d="M12 8v8"/>
-      </svg>`;
+     <!-- docs/assets/img/logo.svg --> <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 1600 990" style="enable-background:new 0 0 4455 990"  x="0" y="0"> <!-- Bloque turquesa (40x28) -->  <!-- Motor: centrado con padding (W ≈ 34px dentro de 40px) --> <!-- s = 34/586 ≈ 0.05802 ; dx = (40-34)/2 = 3 ; dy = 6 + (28 - 426*s)/2 ≈ 7.64 --> <g transform="translate(200, 70) scale(2.0)"> <!-- invertir eje Y del path original --> <g transform="translate(-220,560) scale(0.18,-0.18)"> <path fill="currentColor" d="M1430 3830 l0 -140 263 -2 262 -3 3 -102 3 -103 -48 -1 c-26 -1 -181 -5 -343 -8 l-295 -6 -6 -185 c-4 -102 -7 -186 -8 -187 0 -2 -129 -3 -286 -3 l-285 0 0 -475 0 -475 -130 0 -130 0 -2 328 -3 327 -142 3 -143 3 0 -791 0 -790 144 0 143 0 5 320 c3 176 7 322 9 324 2 2 59 6 127 10 l122 7 0 -475 0 -476 324 0 324 0 43 -54 c24 -30 52 -67 61 -82 10 -16 56 -81 103 -144 48 -63 102 -137 121 -165 19 -27 67 -95 108 -150 l73 -100 374 -6 c206 -3 746 -7 1201 -8 l827 -1 11 43 c6 23 28 103 50 177 21 74 48 171 61 215 12 44 32 114 44 155 l23 75 76 3 77 3 39 -86 c22 -47 46 -105 54 -128 8 -23 27 -71 44 -107 16 -36 32 -77 35 -92 4 -15 20 -55 36 -90 15 -35 33 -78 39 -96 7 -17 17 -46 23 -62 l11 -30 424 0 424 0 0 1474 0 1474 -412 4 c-282 3 -417 1 -424 -6 -7 -6 -21 -36 -32 -66 -12 -30 -51 -127 -87 -215 -37 -88 -73 -178 -81 -200 -8 -22 -31 -79 -51 -127 l-36 -88 -79 0 c-54 0 -80 4 -82 13 -36 116 -164 562 -176 615 l-11 42 -209 0 -210 0 0 180 0 180 -340 0 -341 0 3 103 3 102 268 3 267 2 0 140 0 140 -1130 0 -1130 0 0 -140z m2119 -656 c2 -2 7 -77 10 -166 l6 -163 235 -5 234 -5 37 -125 c87 -299 113 -389 131 -460 10 -41 24 -78 31 -82 15 -10 538 -10 552 0 12 8 32 54 68 152 14 36 33 85 44 110 24 54 68 163 99 245 12 33 36 91 53 128 l31 69 172 -7 c95 -4 175 -10 178 -12 2 -2 6 -539 8 -1194 l4 -1189 -181 0 -181 0 -40 86 c-22 48 -40 91 -40 95 0 5 -17 51 -38 102 -45 108 -110 267 -142 352 -13 33 -28 63 -32 66 -12 8 -544 8 -557 0 -5 -4 -23 -56 -39 -116 -47 -176 -110 -394 -134 -470 l-23 -70 -1019 0 -1018 0 -30 35 c-16 19 -45 58 -64 85 -19 28 -47 66 -62 86 -36 49 -139 188 -182 249 -19 26 -66 90 -103 142 l-68 93 -257 5 -257 5 -3 793 c-2 630 0 792 10 793 7 0 119 0 248 -1 129 -1 254 2 278 6 l42 7 0 190 0 190 997 -7 c549 -4 1000 -9 1002 -12z"/> </g> </g> 
+</svg>
+`;
+    case 'lights': return `
+     <!-- high-beam-warning-faithful.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 40" role="img" aria-label="High Beam Headlights">
+  <g fill="currentColor" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Líneas de luz (4) -->
+    <line x1="4" y1="8"  x2="24" y2="8"/>
+    <line x1="4" y1="16" x2="24" y2="16"/>
+    <line x1="4" y1="24" x2="24" y2="24"/>
+    <line x1="4" y1="32" x2="24" y2="32"/>
+    <!-- Faro tipo "D" -->
+    <path d="M24 4 
+             h12 
+             a16 16 0 0 1 0 32 
+             h-12 
+             z"/>
+  </g>
+</svg>
+`;
     case 'gear': return `
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <circle cx="12" cy="12" r="3"/>
@@ -401,10 +419,20 @@ function iconSVG(name) {
         <path d="M12 12c3 0 5 2 6 6M6 14c1.5 3 4 5 7 5"/>
       </svg>`;
     case 'abs': return `
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="12" r="4"/>
-        <path d="M3 12a9 9 0 0 1 18 0M5 12a7 7 0 0 1 14 0"/>
-      </svg>`;
+  <!-- brake-warning.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Brake Warning Light">
+  <g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Círculo central -->
+    <circle cx="32" cy="32" r="16"/>
+    <!-- Arcos laterales -->
+    <path d="M12 18 A24 24 0 0 0 12 46"/>
+    <path d="M52 18 A24 24 0 0 1 52 46"/>
+  </g>
+  <!-- Signo de exclamación -->
+  <line x1="32" y1="23" x2="32" y2="34" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="32" cy="41" r="1.8" fill="currentColor"/>
+</svg>
+`;
     case 'oil': return `
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M7 10c2-2 3-4 5-6 3 3 5 5 5 8a5 5 0 0 1-10 0z"/>
@@ -422,9 +450,24 @@ function iconSVG(name) {
         <rect x="14" y="16" width="6" height="4" rx="1"/>
       </svg>`;
     case 'electric': return `
-  <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-    <polyline points="13 2 4 14 11 14 9.5 22 20 8 13 8"></polyline>
-  </svg>`;
+  <!-- battery-warning.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 48" role="img" aria-label="Battery Warning Light">
+  <g fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round">
+    <!-- Caja batería -->
+    <rect x="8" y="12" width="48" height="28" rx="2" ry="2"/>
+    <!-- Bornes -->
+    <rect x="16" y="4" width="8" height="8" fill="currentColor" stroke="none"/>
+    <rect x="40" y="4" width="8" height="8" fill="currentColor" stroke="none"/>
+  </g>
+
+  <!-- Símbolos + y - -->
+  <line x1="20" y1="24" x2="28" y2="24" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+  <g stroke="currentColor" stroke-width="4" stroke-linecap="round">
+    <line x1="40" y1="24" x2="48" y2="24"/>
+    <line x1="44" y1="20" x2="44" y2="28"/>
+  </g>
+</svg>
+`;
     default: return `
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <circle cx="12" cy="12" r="9"/>
@@ -437,7 +480,7 @@ function iconSVG(name) {
 const ICON_BY_ID = {
   frenos:        'abs',
   suspension:    'shock',
-  mantencion:    'engine',
+  lights:    'lights',
   ac:            'ac',
   embrague:      'gear',
   motor:         'engine',
