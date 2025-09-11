@@ -33,7 +33,7 @@ html[data-theme=scania] {
   --btn-fg: #FAFAFA;
   --card-l:#041E42;
   --card-bg-t:#000000;
-  --card-t:#53565A; /*color testigo*/
+  --card-t:#5a5357; /*color testigo*/
   --wa-bg: #041E42; /* Azul Scania */
   --wa-fg: #FAFAFA;
   /* halo oscuro para fondo claro */
@@ -54,7 +54,7 @@ html[data-theme=scania-dark] {
   --btn-fg: #FAFAFA; /* Texto en botones */
   --card-l:#FAFAFA;
   --card-bg-t:#000000; /*color fondo testigo*/
-  --card-t:#53565A; /*color testigo*/
+  --card-t:#535a55; /*color testigo*/
   /* WhatsApp FAB (consistente con marca) */
   --wa-bg: #041E42; /* Azul Scania */
   --wa-fg: #FAFAFA;
@@ -711,19 +711,6 @@ a:hover {
 }
 
 /* pastilla/icono */
-.mindmap__icon {
-  inline-size: clamp(56px, 7vmin, 72px);
-  block-size: clamp(56px, 7vmin, 72px);
-  aspect-ratio: 1/1;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-bd);
-  box-sizing: border-box;
-  color: var(--fg);
-}
-
 .mindmap__icon svg {
   display: block;
   width: 64%;
@@ -813,16 +800,6 @@ html.mm-open .mm-tip {
   color: var(--wa-bg);
 }
 
-.mindmap__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  border: 2px solid transparent;
-  border-radius: 0.5rem;
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-}
-
 /* Fallback genérico (tu regla actual con --accent) */
 .mindmap__node--icon:hover .mindmap__icon,
 .mindmap__node--icon[data-show-label="1"] .mindmap__icon,
@@ -890,6 +867,12 @@ html.mm-open .mm-tip {
   inset: 50% auto auto 50%;
   transform: translate(-50%, -50%);
   z-index: 1001;
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 500px;
+  background: var(--card-bg);
+  border-radius: 14px;
+  overflow: hidden;
 }
 
 .mm-media {
@@ -910,7 +893,7 @@ html.mm-open .mm-tip {
 
 .mm-desc {
   margin: 0 0 12px;
-  color: var(--muted);
+  color: var(--fg);
 }
 
 .mm-actions {
@@ -928,17 +911,6 @@ html.mm-open .mm-tip {
   }
 }
 /* Ícono monocromo en nodos del mindmap */
-.mindmap__icon {
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-bd);
-  color: var(--fg); /* <- el svg toma este color */
-}
-
 .mindmap__icon svg {
   width: 22px;
   height: 22px;
@@ -970,17 +942,6 @@ html.mm-open .mm-tip {
 }
 
 /* cajita del ícono (monocromo, respeta tema) */
-.mindmap__icon {
-  width: 70%; /* escala relativa al contenedor */
-  height: 70%;
-  display: grid;
-  place-items: center;
-  border-radius: 10px;
-  background: var(--warn);
-  border: 1px solid var(--card-bd);
-  color: var(--card-t);
-}
-
 .mindmap__icon svg {
   width: 65%;
   height: 65%;

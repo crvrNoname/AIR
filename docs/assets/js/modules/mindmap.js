@@ -187,8 +187,8 @@ center.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal({ id:'scanner', title:'OBD / Scanner' }, phone); }
 });
 
-center.addEventListener('pointerenter', () => showPortalFor(center));
-center.addEventListener('pointerleave', () => hidePortal());
+// center.addEventListener('pointerenter', () => showPortalFor(center));
+// center.addEventListener('pointerleave', () => hidePortal());
 center.addEventListener('pointerup', () => {
   const now = Date.now();
   center._lastTap = center._lastTap || 0;
@@ -200,8 +200,8 @@ center.addEventListener('pointerup', () => {
     openModal({ id:'scanner', title:'OBD / Scanner' }, phone);
   }
 });
-center.addEventListener('focusin',  () => showPortalFor(center));
-center.addEventListener('focusout', () => hidePortal());
+// center.addEventListener('focusin',  () => showPortalFor(center));
+// center.addEventListener('focusout', () => hidePortal());
 
 
 document.addEventListener('pointerdown', (e) => {
@@ -235,22 +235,22 @@ el.innerHTML = `
 let lastTap = 0;
 
 // Hover/focus (desktop & teclado)
-el.addEventListener('pointerenter', () => showPortalFor(el));
-el.addEventListener('pointerleave', () => hidePortal());
-el.addEventListener('focusin',      () => showPortalFor(el));
-el.addEventListener('focusout',     () => hidePortal());
+// el.addEventListener('pointerenter', () => showPortalFor(el));
+// el.addEventListener('pointerleave', () => hidePortal());
+// el.addEventListener('focusin',      () => showPortalFor(el));
+// el.addEventListener('focusout',     () => hidePortal());
 
 // Tacto: 1º tap muestra label (portal); 2º tap (<800ms) abre modal
-el.addEventListener('pointerup', () => {
-  const now = Date.now();
-  if (now - lastTap > 800) {
-    showPortalFor(el);
-    lastTap = now;
-  } else {
-    hidePortal();
-    openModal(n, phone);
-  }
-});
+// el.addEventListener('pointerup', () => {
+//   const now = Date.now();
+//   if (now - lastTap > 800) {
+//     showPortalFor(el);
+//     lastTap = now;
+//   } else {
+//     hidePortal();
+//     openModal(n, phone);
+//   }
+// });
 
 // Accesibilidad teclado
 el.addEventListener('keydown', (e) => {
@@ -309,76 +309,76 @@ root.addEventListener('pointerleave', hidePortal);
 
 
 // === Tooltip global (portal al <body>) ======================================
-// let MM_PORTAL = null;
-// let MM_ANCHOR = null; // el nodo al que está "pegado" el portal
-// let MM_HIDE_TIMER = null;
+let MM_PORTAL = null;
+let MM_ANCHOR = null; // el nodo al que está "pegado" el portal
+let MM_HIDE_TIMER = null;
 
-// function ensurePortal() {
-//   if (MM_PORTAL) return MM_PORTAL;
-//   const el = document.createElement('div');
-//   el.className = 'mm-tip';
-//   el.setAttribute('role', 'tooltip');
-//   el.style.position = 'fixed';
-//   el.style.zIndex = '900';           // 👈 debajo del modal
-//   el.style.pointerEvents = 'none';
-//   el.style.visibility = 'hidden';
-//   document.body.appendChild(el);
-//   MM_PORTAL = el;
+function ensurePortal() {
+  if (MM_PORTAL) return MM_PORTAL;
+  const el = document.createElement('div');
+  el.className = 'mm-tip';
+  el.setAttribute('role', 'tooltip');
+  el.style.position = 'fixed';
+  el.style.zIndex = '900';           // 👈 debajo del modal
+  el.style.pointerEvents = 'none';
+  el.style.visibility = 'hidden';
+  document.body.appendChild(el);
+  MM_PORTAL = el;
 
-//   // En móvil/desktop: si scrolleas o cambia la pestaña → ocultar
-//   window.addEventListener('scroll', hidePortal, { passive: true });
-//   window.addEventListener('resize', hidePortal, { passive: true });
-//   window.addEventListener('blur', hidePortal,   { passive: true });
-//   document.addEventListener('visibilitychange', () => {
-//     if (document.hidden) hidePortal();
-//   });
+  // En móvil/desktop: si scrolleas o cambia la pestaña → ocultar
+  window.addEventListener('scroll', hidePortal, { passive: true });
+  window.addEventListener('resize', hidePortal, { passive: true });
+  window.addEventListener('blur', hidePortal,   { passive: true });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) hidePortal();
+  });
 
-//   return el;
-// }
+  return el;
+}
 
-// function positionPortal(anchorEl) {
-//   if (!MM_PORTAL) return;
-//   const r = anchorEl.getBoundingClientRect();
-//   const x = r.left + r.width / 2;
-//   const y = r.bottom + 8; // 8px debajo del nodo
-//   MM_PORTAL.style.left = `${x}px`;
-//   MM_PORTAL.style.top  = `${y}px`;
-//   MM_PORTAL.style.transform = 'translate(-50%,0)';
-// }
+function positionPortal(anchorEl) {
+  if (!MM_PORTAL) return;
+  const r = anchorEl.getBoundingClientRect();
+  const x = r.left + r.width / 2;
+  const y = r.bottom + 8; // 8px debajo del nodo
+  MM_PORTAL.style.left = `${x}px`;
+  MM_PORTAL.style.top  = `${y}px`;
+  MM_PORTAL.style.transform = 'translate(-50%,0)';
+}
 
-// function showPortalFor(anchorEl) {
-//   // Si hay modal abierto, nunca mostramos el tooltip
-//   if (document.documentElement.classList.contains('mm-open')) return;
+function showPortalFor(anchorEl) {
+  // Si hay modal abierto, nunca mostramos el tooltip
+  if (document.documentElement.classList.contains('mm-open')) return;
 
-//   const label = anchorEl.querySelector('.mindmap__label');
-//   const text  = label?.textContent?.trim()
-//              || anchorEl.getAttribute('title')
-//              || anchorEl.getAttribute('aria-label')
-//              || '';
-//   if (!text) return;
+  const label = anchorEl.querySelector('.mindmap__label');
+  const text  = label?.textContent?.trim()
+             || anchorEl.getAttribute('title')
+             || anchorEl.getAttribute('aria-label')
+             || '';
+  if (!text) return;
 
-//   const tip = ensurePortal();
-//   tip.textContent = text;
-//   tip.classList.add('mm-tip--accent');
+  const tip = ensurePortal();
+  tip.textContent = text;
+  tip.classList.add('mm-tip--accent');
 
-//   MM_ANCHOR = anchorEl;
-//   positionPortal(anchorEl);
-//   tip.style.visibility = 'visible';
+  MM_ANCHOR = anchorEl;
+  positionPortal(anchorEl);
+  tip.style.visibility = 'visible';
 
-//   // Auto-ocultar en pantallas táctiles
-//   clearTimeout(MM_HIDE_TIMER);
-//   if (matchMedia('(pointer: coarse)').matches) {
-//     MM_HIDE_TIMER = setTimeout(hidePortal, 1500);
-//   }
-// }
+  // Auto-ocultar en pantallas táctiles
+  clearTimeout(MM_HIDE_TIMER);
+  if (matchMedia('(pointer: coarse)').matches) {
+    MM_HIDE_TIMER = setTimeout(hidePortal, 1500);
+  }
+}
 
-// function hidePortal() {
-//   clearTimeout(MM_HIDE_TIMER);
-//   MM_HIDE_TIMER = null;
-//   if (!MM_PORTAL) return;
-//   MM_PORTAL.style.visibility = 'hidden';
-//   MM_ANCHOR = null;
-// }
+function hidePortal() {
+  clearTimeout(MM_HIDE_TIMER);
+  MM_HIDE_TIMER = null;
+  if (!MM_PORTAL) return;
+  MM_PORTAL.style.visibility = 'hidden';
+  MM_ANCHOR = null;
+}
 
 // ── Íconos monocromos (SVG inline, usan currentColor) ─────────────────────────
 function iconSVG(name) {
