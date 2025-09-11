@@ -616,13 +616,13 @@ a:hover {
   isolation: isolate;
   /* —— Tokens coherentes —— */
   --center: clamp(140px, 26vmin, 220px); /* tamaño fijo del centro */
-  --gap: 14px; /* separación desde el borde del centro */
+  --gap: 20px; /* separación desde el borde del centro */
   /* radio base: borde del centro + gap + “órbita” configurable */
-  --orbit: 12vmin; /* cuánto quieres “sacar” los nodos */
+  --orbit: 25vmin; /* cuánto quieres “sacar” los nodos */
   --r: calc((var(--center) / 2) + var(--gap) + var(--orbit));
   /* límites para el clamp (mín en el borde del centro, máx para evitar salir del canvas) */
   --r-min: calc((var(--center) / 2) + var(--gap));
-  --r-max: calc((var(--center) / 2) + 42vmin); /* ajusta 42vmin si quieres más/menos margen */
+  --r-max: calc((var(--center) / 2) + 50vmin); /* ajusta 42vmin si quieres más/menos margen */
 }
 
 /* Líneas radiales */
@@ -650,16 +650,20 @@ a:hover {
   position: absolute;
   inset: 50% auto auto 50%;
   transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  line-height: 0;
   background: var(--card-bg);
   border: 1px solid var(--card-bd);
-  color: var(--fg);
   border-radius: 14px;
-  width: clamp(64px, 7vmin, 72px);
-  height: clamp(64px, 7vmin, 72px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  /* usa el token --center para tamaño */
+  width: clamp(110px, 12vmin, 130px);
+  height: clamp(110px, 12vmin, 130px);
   display: grid;
   place-items: center;
   text-align: center;
-  padding: 0; /* el tamaño ya lo fija --center */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }
@@ -790,6 +794,14 @@ html.mm-open .mm-tip {
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
+.mindmap__node--icon:hover,
+.mindmap__node--icon[data-show-label="1"],
+.mindmap__center:hover {
+  border-color: var(--accent); /* 👈 borde externo cambia */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  color: var(--accent); /* 👈 texto + svg cambian */
+}
+
 .mm-tip--accent {
   color: var(--card-l);
   border-color: var(--accent);
@@ -823,42 +835,34 @@ html.mm-open .mm-tip {
 .mindmap__node--icon:hover .mindmap__icon--abs, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--abs,
 .mindmap__node--icon .mindmap__center:hover .mindmap__icon--abs {
   color: #e63946;
-  border-color: #e63946;
 }
 .mindmap__node--icon:hover .mindmap__icon--shock, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--shock,
 .mindmap__node--icon .mindmap__center:hover .mindmap__icon--shock {
   color: #457b9d;
-  border-color: #457b9d;
 }
 .mindmap__node--icon:hover .mindmap__icon--lights, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--lights,
 .mindmap__node--icon .mindmap__center:hover .mindmap__icon--lights {
   color: #ffbe0b;
-  border-color: #ffbe0b;
 }
 .mindmap__node--icon:hover .mindmap__icon--ac, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--ac,
 .mindmap__node--icon .mindmap__center:hover .mindmap__icon--ac {
   color: #06d6a0;
-  border-color: #06d6a0;
 }
 .mindmap__node--icon:hover .mindmap__icon--gear, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--gear,
 .mindmap__node--icon .mindmap__center:hover .mindmap__icon--gear {
   color: #8338ec;
-  border-color: #8338ec;
 }
 .mindmap__node--icon:hover .mindmap__icon--engine, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--engine,
 .mindmap__node--icon .mindmap__center:hover .mindmap__icon--engine {
   color: #f77f00;
-  border-color: #f77f00;
 }
 .mindmap__node--icon:hover .mindmap__icon--electric, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--electric,
 .mindmap__node--icon .mindmap__center:hover .mindmap__icon--electric {
   color: #118ab2;
-  border-color: #118ab2;
 }
 .mindmap__node--icon:hover .mindmap__icon--scanner, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--scanner,
 .mindmap__node--icon .mindmap__center:hover .mindmap__icon--scanner {
   color: #8d99ae;
-  border-color: #8d99ae;
 }
 
 /* ===================== Mobile (≤700px) ===================== */
@@ -1021,34 +1025,47 @@ html.mm-open .mm-tip {
 
 /* Centrado real de los iconos del mindmap */
 .mindmap__node--icon {
+  width: clamp(110px, 12vmin, 130px);
+  height: clamp(110px, 12vmin, 130px);
   display: grid;
-  place-items: center; /* centro perfecto */
-  line-height: 0; /* elimina baseline que desplaza */
+  place-items: center;
+  border-radius: 16px;
+  padding: 0;
 }
 
+/* Contenedor del icono + texto */
 .mindmap__icon {
-  inline-size: clamp(56px, 7vmin, 72px);
-  block-size: clamp(56px, 7vmin, 72px);
-  aspect-ratio: 1/1; /* caja 1:1 estable */
-  display: grid;
-  place-items: center; /* centro interno */
-  border-radius: 12px;
-  background: var(--card-bg-t);
+  display: flex;
+  flex-direction: column; /* ícono arriba, texto abajo */
+  justify-content: center;
+  align-items: center;
+  inline-size: clamp(100px, 10vmin, 120px);
+  block-size: clamp(100px, 10vmin, 120px);
+  background: var(--card-bg);
   border: 1px solid var(--card-bd);
-  box-sizing: border-box;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  padding: 8px; /* espacio interno */
+  gap: 6px; /* separación entre svg y texto */
+  color: var(--fg);
+  text-align: center;
 }
 
+/* SVG dentro del icono */
 .mindmap__icon svg {
-  display: block; /* quita espacio de línea */
-  width: 64%;
-  height: 64%;
-  overflow: visible;
-  vector-effect: non-scaling-stroke;
+  width: 50%;
+  height: auto;
   stroke: currentColor;
   fill: none;
-  stroke-width: 1.9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+}
+
+/* Texto dentro del icono */
+.mindmap__text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: inherit;
+  white-space: normal; /* permite saltar de línea si es largo */
 }
 
 /*# sourceMappingURL=main.css.map */

@@ -274,14 +274,14 @@ a:hover { text-decoration: underline; }
 
   /* —— Tokens coherentes —— */
   --center: clamp(140px, 26vmin, 220px); /* tamaño fijo del centro */
-  --gap: 14px;                            /* separación desde el borde del centro */
+  --gap: 20px;                            /* separación desde el borde del centro */
   /* radio base: borde del centro + gap + “órbita” configurable */
-  --orbit: 12vmin;                        /* cuánto quieres “sacar” los nodos */
+  --orbit: 25vmin;                        /* cuánto quieres “sacar” los nodos */
   --r: calc((var(--center) / 2) + var(--gap) + var(--orbit));
 
   /* límites para el clamp (mín en el borde del centro, máx para evitar salir del canvas) */
   --r-min: calc((var(--center) / 2) + var(--gap));
-  --r-max: calc((var(--center) / 2) + 42vmin); /* ajusta 42vmin si quieres más/menos margen */
+  --r-max: calc((var(--center) / 2) + 50vmin); /* ajusta 42vmin si quieres más/menos margen */
 }
 
 /* Líneas radiales */
@@ -305,19 +305,30 @@ a:hover { text-decoration: underline; }
   position: absolute;
   inset: 50% auto auto 50%;
   transform: translate(-50%, -50%);
-  background: var(--card-bg);
-  border: 1px solid var(--card-bd);
-  color: var(--fg);
-  border-radius: 14px;
-  width: clamp(64px, 7vmin, 72px);
-  height: clamp(64px, 7vmin, 72px);
   display: grid;
   place-items: center;
+  line-height: 0;
+
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  border-radius: 14px;
+  box-shadow: v.$shadow;
+  cursor: pointer;
+
+  /* usa el token --center para tamaño */
+  // width: var(--center);
+  // height: var(--center);
+  width: clamp(110px, 12vmin, 130px);
+  height: clamp(110px, 12vmin, 130px);
+
+   display: grid;
+  place-items: center;
   text-align: center;
-  padding: 0;              /* el tamaño ya lo fija --center */
   box-shadow: v.$shadow;
   cursor: pointer;
 }
+
+
 .mindmap__center:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(0,0,0,.18); }
 
 /* Nodos posicionados en anillo */
@@ -477,6 +488,15 @@ html.mm-open .mm-tip {
   transition: color .2s ease, border-color .2s ease;
 }
 
+.mindmap__node--icon:hover,
+.mindmap__node--icon[data-show-label="1"],
+.mindmap__center:hover {
+  border-color: var(--accent);  /* 👈 borde externo cambia */
+  box-shadow: 0 8px 20px rgba(0,0,0,.18);
+  color: var(--accent);         /* 👈 texto + svg cambian */
+}
+
+
 // .mindmap__icon--abs:hover {
 //   color: #0052cc; // rojo
 //   border-color: #0052cc;
@@ -543,7 +563,7 @@ $service-colors: (
     &[data-show-label="1"] .mindmap__icon--#{$name},
     .mindmap__center:hover .mindmap__icon--#{$name} {
       color: $color;
-      border-color: $color;
+      // border-color: $color;
     }
   }
 }
@@ -757,33 +777,49 @@ $service-colors: (
 }
 
 /* Centrado real de los iconos del mindmap */
-.mindmap__node--icon{
+.mindmap__node--icon {
+  width: clamp(110px, 12vmin, 130px);
+  height: clamp(110px, 12vmin, 130px);
   display: grid;
-  place-items: center;     /* centro perfecto */
-  line-height: 0;          /* elimina baseline que desplaza */
+  place-items: center;
+  border-radius: 16px;
+  padding: 0;
 }
 
-.mindmap__icon{
-  inline-size: clamp(56px, 7vmin, 72px);
-  block-size: clamp(56px, 7vmin, 72px);
-  aspect-ratio: 1 / 1;     /* caja 1:1 estable */
-  display: grid;
-  place-items: center;     /* centro interno */
-  border-radius: 12px;
-  background: var(--card-bg-t);
+/* Contenedor del icono + texto */
+.mindmap__icon {
+  display: flex;
+  flex-direction: column;     /* ícono arriba, texto abajo */
+  justify-content: center;
+  align-items: center;
+
+  inline-size: clamp(100px, 10vmin, 120px);
+  block-size: clamp(100px, 10vmin, 120px);
+
+  background: var(--card-bg);
   border: 1px solid var(--card-bd);
-  box-sizing: border-box;
+  border-radius: 14px;
+  box-shadow: v.$shadow;
+
+  padding: 8px;               /* espacio interno */
+  gap: 6px;                   /* separación entre svg y texto */
+  color: var(--fg);
+  text-align: center;
 }
 
-.mindmap__icon svg{
-  display: block;          /* quita espacio de línea */
-  width: 64%;
-  height: 64%;
-  overflow: visible;
-  vector-effect: non-scaling-stroke;
+/* SVG dentro del icono */
+.mindmap__icon svg {
+  width: 50%;
+  height: auto;
   stroke: currentColor;
   fill: none;
-  stroke-width: 1.9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+}
+
+/* Texto dentro del icono */
+.mindmap__text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: inherit;
+  white-space: normal;       /* permite saltar de línea si es largo */
 }
