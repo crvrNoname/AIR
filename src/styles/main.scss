@@ -276,7 +276,7 @@ a:hover { text-decoration: underline; }
   --center: clamp(140px, 26vmin, 220px); /* tamaño fijo del centro */
   --gap: 2px;                            /* separación desde el borde del centro */
   /* radio base: borde del centro + gap + “órbita” configurable */
-  --orbit: 10vmin;                        /* cuánto quieres “sacar” los nodos */
+  --orbit: 5vmin;                        /* cuánto quieres “sacar” los nodos */
   --r: calc((var(--center) / 2) + var(--gap) + var(--orbit));
 
   /* límites para el clamp (mín en el borde del centro, máx para evitar salir del canvas) */
