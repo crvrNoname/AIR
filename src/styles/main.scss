@@ -3,7 +3,6 @@
 @use "./mixins" as m;
 @use "./floatingBar";
 
-
 /* Preferencias de UI */
 :root { color-scheme: dark light; }
 html[data-theme="scania"] { color-scheme: light; }
@@ -132,16 +131,14 @@ a:hover { text-decoration: underline; }
 .form__actions { display: flex; gap: 10px; margin-top: 10px; }
 .form__msg { margin-top: 8px; color: var(--warn); }
 
-/* ===== Footer centrado (mobile-first, themable) ===== */
-
-
+/* ===== Footer ===== */
 .footer {
   margin-top: 48px;
   padding: 24px 0;
   border-top: 1px solid var(--card-bd);
   background: transparent;
   color: var(--fg);
-  text-align: center; /* ⬅️ centro global de textos */
+  text-align: center;
 
   h4 {
     margin: 0 0 .5rem;
@@ -160,106 +157,56 @@ a:hover { text-decoration: underline; }
   }
   a:hover { text-decoration: underline; }
 }
-
-/* 1 col (móvil) → 2 col (>=640) → 4 col (>=960), con contenido centrado */
 .footer__grid {
   @include m.container;
   display: grid;
   gap: 20px;
   grid-template-columns: 1fr;
-
-  /* centra los ítems dentro de cada celda */
   justify-items: center;
   align-items: start;
 
-  /* columnas responsivas */
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @media (min-width: 960px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  @media (min-width: 640px) { grid-template-columns: repeat(2, 1fr); }
+  @media (min-width: 960px) { grid-template-columns: repeat(4, 1fr); }
 
-  /* cada “columna” centrada y con ancho legible */
   > div {
     display: flex;
     flex-direction: column;
-    align-items: center;     /* ⬅️ centro horizontal del contenido */
+    align-items: center;
     gap: 6px;
-    max-width: 32ch;         /* ⬅️ evita líneas muy largas, más armónico */
+    max-width: 32ch;
   }
 }
-
-/* Logo del footer: centrado y con escalado suave */
 .footer__logo {
   width: auto;
-  height: 48px;             /* móvil */
+  height: 48px;
   max-height: 8vh;
   display: block;
-  margin-inline: auto;       /* ⬅️ asegura centrado del img */
+  margin-inline: auto;
 
   @media (min-width: 640px) { height: 56px; }
   @media (min-width: 960px) { height: 60px; }
 }
-
-/* Lista de enlaces de contacto, centrada */
-.footer .list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-}
+.footer .list { list-style: none; margin: 0; padding: 0; text-align: center; }
 .footer .list li + li { margin-top: 6px; }
+.footer__copy { @include m.container; text-align: center; margin-top: 16px; color: var(--muted); font-size: .9rem; }
+.footer .theme-switcher { @include m.container; margin-top: 12px; display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
 
-/* Copiright centrado */
-.footer__copy {
-  @include m.container;
-  text-align: center;
-  margin-top: 16px;
-  color: var(--muted);
-  font-size: .9rem;
-}
-
-/* Switcher de tema centrado en todos los tamaños */
-.footer .theme-switcher {
-  @include m.container;
-  margin-top: 12px;
-  display: flex;
-  gap: .5rem;
-  flex-wrap: wrap;
-  justify-content: center;   /* ⬅️ centrado estable */
-}
-/* Botón de WhatsApp (usa los tokens del tema) */
-.btn--wa {
-  background: var(--wa-bg);
-  color: var(--wa-fg);
-  border-color: transparent;
-
-}
-
-
-
-/* WhatsApp flotante */
+/* WhatsApp */
+.btn--wa { background: var(--wa-bg); color: var(--wa-fg); border-color: transparent; }
 .wafloat {
   position: fixed; right: 18px; bottom: 18px;
-  background: var(--wa-bg);
-  color: var(--wa-fg);
+  background: var(--wa-bg); color: var(--wa-fg);
   border-radius: 999px;
-  padding: 12px;                      /* padding parejo */
+  padding: 12px;
   font-size: 20px;
-  box-shadow: v.$shadow;              /* sombra del contenedor */
+  box-shadow: v.$shadow;
   z-index: 60;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   img {
-    width: 48px;                      /* más consistente que vw/vh */
-    height: 48px;
-    display: block;
-    /* glow del ícono según tema */
+    width: 48px; height: 48px; display: block;
     filter: drop-shadow(0 0 6px var(--wa-dropshadow));
-    -webkit-filter: drop-shadow(0 0 6px var(--wa-dropshadow));
   }
 }
 
@@ -267,46 +214,21 @@ a:hover { text-decoration: underline; }
 .mindmap {
   position: relative;
   width: min(900px, 100%);
-  aspect-ratio: 1 / 1;
   margin: 3px auto;
-  overflow: visible;
   isolation: isolate;
-
-  /* —— Tokens coherentes —— */
-  --center: clamp(140px, 26vmin, 220px); /* tamaño fijo del centro */
-  --gap: 2px;                            /* separación desde el borde del centro */
-  /* radio base: borde del centro + gap + “órbita” configurable */
-  --orbit: 15vmin;                        /* cuánto quieres “sacar” los nodos */
-  --r: calc((var(--center) / 2) + var(--gap) + var(--orbit));
-
-  /* límites para el clamp (mín en el borde del centro, máx para evitar salir del canvas) */
-  --r-min: calc((var(--center) / 2) + var(--gap));
-  --r-max: calc((var(--center) / 2) + 50vmin); /* ajusta 42vmin si quieres más/menos margen */
 }
 
-/* Líneas radiales */
-.mindmap__svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+.mindmap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(8px, 2vmin, 16px);
+  place-items: center;
+   position: relative;
+  z-index: 1;
 }
-.mindmap__line {
-  stroke: var(--card-bd);
-  stroke-width: 2;
-  transition: stroke .2s ease;
-}
-.mindmap__line.is-hover,
-.mindmap__line.is-active { stroke: var(--accent); }
 
-/* Centro: usa el token --center para mantener coherencia con los radios */
-/* Nodo central, igual que los hijos pero centrado */
+/* Centro */
 .mindmap__center {
-  position: absolute;
-  inset: 50% auto auto 50%;
-  transform: translate(-50%, -50%);
-
   display: grid;
   place-items: center;
   text-align: center;
@@ -320,142 +242,109 @@ a:hover { text-decoration: underline; }
 
   inline-size: fit-content;
   block-size: fit-content;
-
-  // padding: clamp(2px, 1vmin, 2px);
 }
 
-/* Reusa la misma lógica de icono + texto */
+/* === Líneas de unión al centro === */
+.mindmap__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0; /* 👈 debajo de nodos */
+}
+
+.mindmap__line {
+  stroke: var(--card-bd);
+  stroke-width: 2;
+  transition: stroke .2s ease;
+}
+
+.mindmap__line.is-hover,
+.mindmap__line.is-active {
+  stroke: var(--accent);
+}
+
+
 .mindmap__center .mindmap__icon {
   display: flex;
-  flex-direction: column;  /* 🔑 SVG arriba, texto abajo */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: clamp(4px, 0.8vmin, 10px);
 }
-
-
 .mindmap__center:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(0,0,0,.18); }
 
-/* Nodos posicionados en anillo */
-.mindmap__node {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  /* ángulo y radio; el ángulo viene de JS con --a, el radio usa el clamp coherente */
-  --a: 0deg;
-  transform:
-    translate(-50%, -50%)
-    rotate(var(--a))
-    translate(clamp(var(--r-min), var(--r), var(--r-max)))
-    rotate(calc(-1 * var(--a)));
+/* Nodos */
+.mindmap__node--icon {
+  width: auto; /* ⚠️ repetido */
+  height: auto;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  box-shadow: v.$shadow;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+.mindmap__node--icon:hover {
+  border-color: var(--accent);
+  box-shadow: 0 8px 20px rgba(0,0,0,.18);
+}
+
+/* Contenedor icono + texto */
+.mindmap__icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  inline-size: fit-content;
+  block-size: fit-content;
 
   background: var(--card-bg);
   border: 1px solid var(--card-bd);
   border-radius: 14px;
   box-shadow: v.$shadow;
-  cursor: pointer;
-  user-select: none;
-  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
 
-    /* Por defecto, usa el color de texto global; puedes sobreescribirlo por nodo si quieres */
-  --node-fg: var(--fg);
-  color: var(--node-fg); 
-}
-.mindmap__node:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(0,0,0,.18); }
-
-/* ===== Modo icon-only ===== */
-
-
-/* pastilla/icono */
-
-
-
-
-/* Tooltip/título */
-.mindmap__label {
-
-
-   display: none !important;
+  padding: clamp(6px, 1vmin, 12px);
+  gap: clamp(4px, 0.8vmin, 10px);
+  color: var(--fg);
+  text-align: center;
 }
 
-// CSS Etiquetas
-/* Si algún tema requiere ajuste fino, se puede “retocar” aquí */
-html[data-theme="propuesta"] {
-  /* ejemplo: leve mezcla para mejorar contraste en oscuro */
-  --tip-bg: color-mix(in oklab, var(--card-bg) 92%, var(--accent) 8%);
-  --tip-bd: color-mix(in oklab, var(--card-bd) 85%, var(--accent) 15%);
-}
-html[data-theme="scania"] {
-  /* ejemplo: más claro en tema claro */
-  --tip-bg: color-mix(in oklab, var(--card-bg) 96%, white 4%);
-  --tip-bd: var(--card-bd);
-}
-
-/* Tooltip global portaleado al <body> */
-.mm-tip {
-
-    position: fixed;
-  z-index: 900;                 // 👈 por debajo del modal (1000/1001)
-  background: var(--tip-bg);
-  border: 1px solid var(--tip-bd);
-  color: var(--tip-fg);
-  padding: 3px 5px;
-  border-radius: 8px;
-  box-shadow: var(--tip-shadow);
-  font-size: .9rem;
-  font-weight: 700;
-  white-space: nowrap;
-  pointer-events: none;
-  mix-blend-mode: normal;
-  transition: background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
-}
-
-/* Con modal abierto, nunca mostrar tip */
-html.mm-open .mm-tip { 
-  display: none !important; 
-}
-
-
-
-/* Variante acento (la activa el JS con .mm-tip--accent en hover/tap) */
-.mm-tip--accent {
-  color: var(--accent);
-  border-color: var(--accent);
-  /* si quieres resaltar el fondo con una pizca del acento */
-  // background: var(--card-bd);
-}
-
-/* Opcional: cuando el nodo/centro está hover, el ícono también refleja el acento */
-.mindmap__node--icon:hover .mindmap__icon,
-.mindmap__node--icon[data-show-label="1"] .mindmap__icon,
-.mindmap__center:hover .mindmap__icon {
-  border-color: var(--accent);
-  color: var(--accent);
-  transition: color .2s ease, border-color .2s ease;
-}
-
-.mindmap__node--icon:hover,
-.mindmap__node--icon[data-show-label="1"],
-.mindmap__center:hover {
-  border-color: var(--accent);  /* 👈 borde externo cambia */
-  box-shadow: 0 8px 20px rgba(0,0,0,.18);
-  color: var(--accent);         /* 👈 texto + svg cambian */
-}
-
-
-
-
-.mm-tip--accent {
-  color: var(--card-l);
-  border-color: var(--accent);
-}
-.mindmap__node--icon:hover .mindmap__label,
-.mindmap__node--icon[data-show-label="1"] .mindmap__label {
+/* SVG dentro del icono */
+.mindmap__icon svg {
   display: block;
-  color: var(--wa-bg);
+  width: clamp(24px, 6vmin, 60px);
+  height: auto;
+
+  overflow: visible;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.9; /* ⚠️ repetido */
+  stroke-linecap: round; /* ⚠️ repetido */
+  stroke-linejoin: round; /* ⚠️ repetido */
+  vector-effect: non-scaling-stroke;
 }
-// palette por servicio
+
+/* Texto dentro del icono */
+.mindmap__text {
+  font-size: clamp(0.85rem, 1.6vmin, 1.1rem);
+  font-weight: 600;
+  line-height: 1.3;
+  color: inherit;
+
+  white-space: normal;
+  text-align: center;
+  max-inline-size: clamp(120px, 18vmin, 180px);
+}
+
+/* Colores por servicio */
 $service-colors: (
   abs:       #e63946,
   shock:     #457b9d,
@@ -467,45 +356,25 @@ $service-colors: (
   scanner:   #8d99ae
 );
 
-// estilos base del icono
-
-
-/* Fallback genérico (tu regla actual con --accent) */
-.mindmap__node--icon:hover .mindmap__icon,
-.mindmap__node--icon[data-show-label="1"] .mindmap__icon,
-.mindmap__center:hover .mindmap__icon {
-  color: var(--accent);
-  border-color: var(--accent);
-}
-
-/* Reglas por servicio (hover específico) */
 .mindmap__node--icon {
   @each $name, $color in $service-colors {
-    // cuando el nodo padre se hoverée, o tenga data-show-label, o el centro sea hover,
-    // colorea únicamente los iconos que tengan la clase --$name
     &:hover .mindmap__icon--#{$name},
     &[data-show-label="1"] .mindmap__icon--#{$name},
     .mindmap__center:hover .mindmap__icon--#{$name} {
       color: $color;
-      // border-color: $color;
     }
   }
 }
 
-
 /* ===================== Modal ===================== */
-.mm-modal {
-  position: fixed; inset: 0; z-index: 1000; display: none;
-}
+.mm-modal { position: fixed; inset: 0; z-index: 1000; display: none; }
 .mm-modal[open] { display: block; }
-
 .mm-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.55); backdrop-filter: blur(2px); }
 .mm-dialog {
   position: absolute;
   inset: 50% auto auto 50%;
   transform: translate(-50%,-50%);
   z-index: 1001;
-
   display: grid;
   grid-template-columns: 1fr;
   max-width: 500px;
@@ -513,8 +382,6 @@ $service-colors: (
   border-radius: 14px;
   overflow: hidden;
 }
-
-
 .mm-media { aspect-ratio: 4/3; width: 100%; height: 100%; object-fit: cover; }
 .mm-body { padding: 14px 16px; }
 .mm-title { margin: 0 0 6px; font-size: 1.15rem; }
@@ -525,126 +392,5 @@ $service-colors: (
   .mm-dialog { grid-template-columns: 1fr; }
   .mm-media { max-height: 44vh; }
 }
-
-/* Ícono monocromo en nodos del mindmap */
-
-
-
-.mindmap__center { cursor: pointer; }
-.mindmap__center:hover { border-color: var(--accent); box-shadow: 0 8px 20px rgba(0,0,0,.18); }
-
-/* ===== Mindmap: versión icon-only ===== */
-.mindmap__node--icon {
-  /* tamaño compacto y armonioso */
-  width: clamp(64px, 7vmin, 72px);
-  height: clamp(64px, 7vmin, 72px);
-  border-radius: 14px;
-  display: grid;
-  place-items: center;
-  position: absolute; /* ya lo era, pero reafirmamos para el tooltip */
-  padding: 0;         /* sin padding para que el ícono “respire” */
-}
-
-/* cajita del ícono (monocromo, respeta tema) */
-
-
-
-
-/* Oculta texto por defecto, lo usamos como tooltip */
-.mindmap__label {
-  position: absolute;
-  left: 50%;
-  top: calc(100% + 8px);
-  transform: translateX(-50%);
-  white-space: nowrap;
-  background: var(--card-bg);
-  border: 1px solid var(--accent);
-  color: var(--fg);
-  padding: 6px 8px;
-  border-radius: 8px;
-  box-shadow: var(--shadow);
-  font-size: .9rem;
-  font-weight: 600;
-  display: none;           /* ← oculto por defecto */
-  pointer-events: none;    /* no tapa el hover del nodo */
-  z-index: 2;
-}
-
-/* Mostrar tooltip con hover o con data flag (tap) */
-.mindmap__node--icon:hover .mindmap__label,
-.mindmap__node--icon[data-show-label="1"] .mindmap__label {
-  display: block;
-}
-
-/* realce del nodo + línea al pasar/tocar */
-.mindmap__node--icon:hover,
-.mindmap__node--icon[data-show-label="1"] {
-  border-color: var(--accent);
-  box-shadow: 0 8px 20px rgba(0,0,0,.18);
-}
-
-/* Centrado real de los iconos del mindmap */
-.mindmap__node--icon {
-  display: grid;
-  place-items: center;
-
-  /* 🔑 que crezca con el contenido */
-  inline-size: fit-content;
-  block-size: fit-content;
-
-  border-radius: 16px;
-  padding: 0;
-}
-/* Contenedor del icono + texto */
-.mindmap__icon {
-  display: flex;
-  flex-direction: column;   /* ícono arriba, texto abajo */
-  justify-content: center;
-  align-items: center;
-
-  /* 🔑 el tamaño del bloque depende del contenido */
-  inline-size: fit-content;
-  block-size: fit-content;
-
-  background: var(--card-bg);
-  border: 1px solid var(--card-bd);
-  border-radius: 14px;
-  box-shadow: v.$shadow;
-
-  padding: clamp(6px, 1vmin, 12px);  /* padding flexible */
-  gap: clamp(4px, 0.8vmin, 10px);    /* separación svg/texto */
-  color: var(--fg);
-  text-align: center;
-}
-
-/* SVG dentro del icono */
-.mindmap__icon svg {
-  display: block;
-  width: clamp(24px, 6vmin, 60px);   /* escala según viewport */
-  height: auto;
-
-  overflow: visible;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
-}
-
-/* Texto dentro del icono */
-/* Texto dentro del icono */
-.mindmap__text {
-  font-size: clamp(0.85rem, 1.6vmin, 1.1rem);
-  font-weight: 600;
-  line-height: 1.3;
-  color: inherit;
-
-  white-space: normal;          /* 🔑 permite saltos de línea */
-  text-align: center;           /* centra cada línea */
-  max-inline-size: clamp(120px, 18vmin, 180px); /* 🔑 ancho máximo del texto */
-}
-
-
 
 
