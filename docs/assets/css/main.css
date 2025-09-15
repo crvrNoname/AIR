@@ -690,13 +690,13 @@ a:hover {
   align-items: center;
   inline-size: fit-content;
   block-size: fit-content;
-  background: var(--card-bg);
+  background: var(--card-bg-t); /* ⬅️ Fondo base */
   border: 1px solid var(--card-bd);
   border-radius: 14px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   padding: clamp(6px, 1vmin, 12px);
   gap: clamp(4px, 0.8vmin, 10px);
-  color: var(--fg);
+  color: var(--card-t); /* ⬅️ Color base texto + svg */
   text-align: center;
 }
 
@@ -718,41 +718,49 @@ a:hover {
 .mindmap__text {
   font-size: clamp(0.85rem, 1.6vmin, 1.1rem);
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.2; /* ⬅️ menor, elimina aire sobrante */
   color: inherit;
+  display: inline-block;
   white-space: normal;
   text-align: center;
+  margin: 0; /* ⬅️ elimina margen colapsado */
+  padding: 2px 6px; /* ⬅️ espacio uniforme */
+  border-radius: 4px;
   max-inline-size: clamp(120px, 18vmin, 180px);
 }
 
 /* Colores por servicio */
-.mindmap__node--icon:hover .mindmap__icon--abs, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--abs,
-.mindmap__node--icon .mindmap__center:hover .mindmap__icon--abs {
-  color: #e63946;
+.mindmap__node--icon:hover .mindmap__icon--ABS, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--ABS,
+.mindmap__node--icon .mindmap__center:hover .mindmap__icon--ABS {
+  color: #FFA800;
 }
-.mindmap__node--icon:hover .mindmap__icon--shock, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--shock,
-.mindmap__node--icon .mindmap__center:hover .mindmap__icon--shock {
-  color: #457b9d;
+.mindmap__node--icon:hover .mindmap__icon--frenos, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--frenos,
+.mindmap__node--icon .mindmap__center:hover .mindmap__icon--frenos {
+  color: #FF1E1E;
+}
+.mindmap__node--icon:hover .mindmap__icon--airbag, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--airbag,
+.mindmap__node--icon .mindmap__center:hover .mindmap__icon--airbag {
+  color: #FF1E1E;
 }
 .mindmap__node--icon:hover .mindmap__icon--lights, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--lights,
 .mindmap__node--icon .mindmap__center:hover .mindmap__icon--lights {
-  color: #ffbe0b;
+  color: #FFA800;
 }
-.mindmap__node--icon:hover .mindmap__icon--ac, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--ac,
-.mindmap__node--icon .mindmap__center:hover .mindmap__icon--ac {
-  color: #06d6a0;
+.mindmap__node--icon:hover .mindmap__icon--TPMS, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--TPMS,
+.mindmap__node--icon .mindmap__center:hover .mindmap__icon--TPMS {
+  color: #FFA800;
 }
-.mindmap__node--icon:hover .mindmap__icon--gear, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--gear,
-.mindmap__node--icon .mindmap__center:hover .mindmap__icon--gear {
-  color: #8338ec;
+.mindmap__node--icon:hover .mindmap__icon--filtroParticulas, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--filtroParticulas,
+.mindmap__node--icon .mindmap__center:hover .mindmap__icon--filtroParticulas {
+  color: #FFA800;
 }
 .mindmap__node--icon:hover .mindmap__icon--engine, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--engine,
 .mindmap__node--icon .mindmap__center:hover .mindmap__icon--engine {
-  color: #f77f00;
+  color: #FFA800;
 }
-.mindmap__node--icon:hover .mindmap__icon--electric, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--electric,
-.mindmap__node--icon .mindmap__center:hover .mindmap__icon--electric {
-  color: #118ab2;
+.mindmap__node--icon:hover .mindmap__icon--bateria, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--bateria,
+.mindmap__node--icon .mindmap__center:hover .mindmap__icon--bateria {
+  color: #FF1E1E;
 }
 .mindmap__node--icon:hover .mindmap__icon--scanner, .mindmap__node--icon[data-show-label="1"] .mindmap__icon--scanner,
 .mindmap__node--icon .mindmap__center:hover .mindmap__icon--scanner {

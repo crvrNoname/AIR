@@ -7,7 +7,7 @@ export const SERVICES = {
     { id: 'frenos',        title: 'Frenos',                   img: 'frenos.jpg',                desc: 'Pastillas, discos, líquido y purgado.' },
     { id: 'aire',          title: 'Aire',                     img: 'aire.jpg',                  desc: 'Mantenimiento de sistema de aire.' },
     { id: 'motor',         title: 'Ajuste de motor',          img: 'motor.jpg',                 desc: 'Ajustes y sincronización.' },
-    { id: 'ac',            title: 'Aire acondicionado',       img: 'aireAcondicionado.jpg',     desc: 'Carga, revisión y reparación del A/C.' },
+    { id: 'airbag',            title: 'Airbag',       img: 'airbag.jpg',     desc: 'Carga, revisión y reparación del Airbag.' },
   ],
   electronica: [
     { id: 'scanner',       title: 'Diagnóstico con escáner',  img: 'scanner.jpg',               desc: 'Lectura de códigos OBD y análisis.' },
