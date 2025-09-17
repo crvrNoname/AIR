@@ -71,20 +71,61 @@ function openModal(node, phone) {
   const modal = mountModal();
   const svc = findService(node.id);
   const title = svc?.title || node.title;
-  const desc = svc?.desc || 'Servicio especializado.';
-  const img = svc?.img ? imgUrl(svc.img) : fallbackImg();
+  const desc  = svc?.desc  || 'Servicio especializado.';
 
-  modal.querySelector('.mm-media').setAttribute('src', img);
-  modal.querySelector('.mm-media').setAttribute('alt', `${title} – AIR-Service`);
-  modal.querySelector('.mm-title').textContent = title;
-  modal.querySelector('.mm-desc').textContent = desc;
+  const imgs = Array.isArray(svc?.img) ? svc.img : [svc?.img];
+  const fallback = fallbackImg();
+
+  // Generamos grupo si hay más de 1 imagen
+  // Generamos grupo si hay más de 1 imagen
+const mediaHTML = imgs.length > 1
+  ? `
+    <div class="mm-media-group">
+      <button class="mm-prev" aria-label="Anterior">‹</button>
+      <div class="mm-media-track">
+        ${imgs.map(src => `
+          <img 
+            class="mm-media"
+            src="${imgUrl(src)}"
+            alt="${title} – AIR-Service"
+            onerror="this.onerror=null;this.src='${fallback}'"
+          />`).join('')}
+      </div>
+      <button class="mm-next" aria-label="Siguiente">›</button>
+    </div>
+  `
+  : `
+    <img 
+      class="mm-media"
+      src="${imgUrl(imgs[0])}"
+      alt="${title} – AIR-Service"
+      onerror="this.onerror=null;this.src='${fallback}'"
+    />
+  `;
+
+
+  modal.querySelector('.mm-dialog').innerHTML = `
+    ${mediaHTML}
+    <div class="mm-body">
+      <h3 class="mm-title" id="mmTitle">${title}</h3>
+      <p class="mm-desc">${desc}</p>
+      <div class="mm-actions">
+        <a class="btn btn--wa" target="_blank" rel="noopener" id="mmWhatsapp">Pedir este servicio</a>
+        <a class="btn btn--ghost" href="../pages/servicios.html" id="mmVerMas">Ver más</a>
+      </div>
+    </div>
+  `;
 
   const text = encodeURIComponent(`Hola, quiero *${title}* luego de un diagnóstico con escáner.`);
   modal.querySelector('#mmWhatsapp').setAttribute('href', buildWhatsAppLink(phone, text));
-  document.documentElement.classList.add('mm-open');
-  hidePortal();
+
+  if (imgs.length > 1) {
+  enableCarousel(modal.querySelector('.mm-media-group'));
+}
+
   modal.setAttribute('open', '');
 }
+
 
 export function initMindMap(selector, { phone }) {
   const root = document.querySelector(selector);
@@ -173,6 +214,8 @@ export function initMindMap(selector, { phone }) {
     grid.appendChild(el);
   });
 
+
+  
   // ⬇️ Función para dibujar líneas desde el centro hacia cada nodo
   function drawLines(svg, center, nodes) {
     if (!center || !nodes.length) return;
@@ -226,6 +269,20 @@ export function initMindMap(selector, { phone }) {
 let MM_PORTAL = null;
 let MM_HIDE_TIMER = null;
 
+function enableCarousel(container) {
+  const track = container.querySelector('.mm-media-track');
+  const prev  = container.querySelector('.mm-prev');
+  const next  = container.querySelector('.mm-next');
+  if (!track) return;
+
+  prev?.addEventListener('click', () => {
+    track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' });
+  });
+  next?.addEventListener('click', () => {
+    track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
+  });
+}
+
 function ensurePortal() {
   if (MM_PORTAL) return MM_PORTAL;
   const el = document.createElement('div');
@@ -271,7 +328,7 @@ function iconSVG(name) {
       </svg>`;
     case 'lights': return `
       <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="1024.000000pt" height="1024.000000pt" viewBox="0 0 1024.000000 1024.000000"
+viewBox="0 0 1024.000000 1024.000000"
  preserveAspectRatio="xMidYMid meet">
 
 <g transform="translate(0.000000,1024.000000) scale(0.100000,-0.100000)"
@@ -301,7 +358,7 @@ m513 -654 c505 -58 876 -145 1325 -312 644 -240 1187 -571 1586 -968 333 -332
 </svg>`;
     case 'filtroParticulas': return `
      <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="1024.000000pt" height="1024.000000pt" viewBox="0 0 1024.000000 1024.000000"
+  viewBox="0 0 1024.000000 1024.000000"
  preserveAspectRatio="xMidYMid meet">
 
 <g transform="translate(0.000000,1024.000000) scale(0.100000,-0.100000)"
@@ -390,7 +447,7 @@ m171 -253 c18 -12 44 -38 57 -57 20 -29 23 -44 20 -93 -4 -46 -10 -63 -34 -88
 </svg>`;
     case 'airbag': return `
 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="128.000000pt" height="128.000000pt" viewBox="0 0 128.000000 128.000000"
+ viewBox="0 0 128.000000 128.000000"
  preserveAspectRatio="xMidYMid meet">
 <metadata>
 Created by potrace 1.16, written by Peter Selinger 2001-2019
@@ -428,7 +485,7 @@ fill="currentColor" stroke="none">
       </svg>`;
     case 'ABS': return `
       <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="1024.000000pt" height="1024.000000pt" viewBox="0 0 1024.000000 1024.000000"
+ viewBox="0 0 1024.000000 1024.000000"
  preserveAspectRatio="xMidYMid meet">
 
 <g transform="translate(0.000000,1024.000000) scale(0.100000,-0.100000)"
@@ -478,7 +535,7 @@ m662 612 c44 -20 62 -36 83 -72 72 -124 24 -302 -95 -350 -53 -21 -184 -39
 </svg>`;
     case 'TPMS': return `
     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="1024.000000pt" height="1024.000000pt" viewBox="0 0 1024.000000 1024.000000"
+ viewBox="0 0 1024.000000 1024.000000"
  preserveAspectRatio="xMidYMid meet">
 
 <g transform="translate(0.000000,1024.000000) scale(0.100000,-0.100000)"
@@ -523,7 +580,7 @@ c3 -140 7 -256 8 -257 1 -2 189 -3 417 -3 399 0 415 1 425 19 6 12 10 114 10
       </svg>`;
     case 'bateria': return `
       <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="1024.000000pt" height="1024.000000pt" viewBox="0 0 1024.000000 1024.000000"
+  viewBox="0 0 1024.000000 1024.000000"
  preserveAspectRatio="xMidYMid meet">
 
 <g transform="translate(0.000000,1024.000000) scale(0.100000,-0.100000)"

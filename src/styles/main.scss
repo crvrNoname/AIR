@@ -105,6 +105,20 @@ a:hover { text-decoration: underline; }
 /* Cards */
 .card { @include m.card; overflow: hidden; }
 .card__media { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+.card__media-group {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;   /* 👈 scroll horizontal si hay muchas */
+  padding-bottom: 6px;
+}
+
+.card__media-group img {
+  flex: 0 0 auto;
+  width: 200px;       /* ajusta al tamaño que quieras */
+  border-radius: 8px;
+  object-fit: cover;
+}
+
 .card__body { padding: 14px; }
 .card__title { margin: 0 0 6px; color: var(--fg); }
 .card__desc { color: var(--muted); margin: 0; }
@@ -320,37 +334,40 @@ a:hover { text-decoration: underline; }
 }
 
 /* SVG dentro del icono */
+/* SVG dentro del icono */
 .mindmap__icon svg {
   display: block;
-  width: clamp(24px, 6vmin, 60px);
+  /* De 24px–60px a un rango mayor. 8vmin permite crecer en pantallas grandes */
+  width: clamp(56px, 10vmin, 96px);
   height: auto;
-
   overflow: visible;
   stroke: currentColor;
   fill: none;
-  stroke-width: 1.9; /* ⚠️ repetido */
-  stroke-linecap: round; /* ⚠️ repetido */
-  stroke-linejoin: round; /* ⚠️ repetido */
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
-  
 }
-
+.mindmap__icon--engine svg {
+  transform: scale(0.8);
+}
+.mindmap__icon--filtroParticulas svg {
+  transform: scale(1.5);
+}
+.mindmap__icon--scanner svg {
+  vector-effect: none;
+  stroke-width: 1; /* un grosor coherente con el resto de pictos */
+}
 /* Texto dentro del icono */
 .mindmap__text {
-  font-size: clamp(0.85rem, 1.6vmin, 1.1rem);
+  font-size: clamp(0.85rem, 1.6vmin, 1.15rem); /* ⬅️ escala junto al svg */
   font-weight: 600;
-  line-height: 1.2;        /* ⬅️ menor, elimina aire sobrante */
+  line-height: 1.2;
   color: inherit;
 
-  display: inline-block;
   white-space: normal;
   text-align: center;
-
-  margin: 0;               /* ⬅️ elimina margen colapsado */
-  padding: 2px 6px;        /* ⬅️ espacio uniforme */
-  
-  border-radius: 4px;
-
+  margin: 0;
   max-inline-size: clamp(120px, 18vmin, 180px);
 }
 
@@ -365,19 +382,26 @@ $service-colors: (
   filtroParticulas: #FFA800,
   engine:    #FFA800,
   bateria:  #FF1E1E,
-  scanner:   #8d99ae
+  scanner:    #FF1E1E
 );
 
 .mindmap__node--icon {
   @each $name, $color in $service-colors {
     &:hover .mindmap__icon--#{$name},
-    &[data-show-label="1"] .mindmap__icon--#{$name},
-    .mindmap__center:hover .mindmap__icon--#{$name} {
+    &[data-show-label="1"] .mindmap__icon--#{$name}
+    {
       color: $color;
     }
   }
 }
 
+.mindmap__center {
+  @each $name, $color in $service-colors {
+    &:hover .mindmap__icon--#{$name} {
+      color: $color;
+    }
+  }
+}
 /* ===================== Modal ===================== */
 .mm-modal { position: fixed; inset: 0; z-index: 1000; display: none; }
 .mm-modal[open] { display: block; }
@@ -405,4 +429,49 @@ $service-colors: (
   .mm-media { max-height: 44vh; }
 }
 
+
+
+/////////////carrousel
+.mm-media-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;  
+  position: relative;
+}
+
+.mm-media-track {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
+
+.mm-media-track img {
+  flex: 0 0 auto;
+  width: 100%;
+  // max-width: 360px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.mm-prev,
+.mm-next {
+   position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  color: var(--fg);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mm-prev { left: 6px; }
+.mm-next { right: 6px; }
 
