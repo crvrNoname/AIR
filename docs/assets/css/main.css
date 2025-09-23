@@ -639,6 +639,7 @@ a:hover {
   cursor: pointer;
   inline-size: fit-content;
   block-size: fit-content;
+  padding: 0px;
 }
 
 /* === Líneas de unión al centro === */
@@ -827,8 +828,8 @@ a:hover {
 .mm-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(3px);
 }
 
 .mm-dialog {
@@ -837,10 +838,12 @@ a:hover {
   transform: translate(-50%, -50%);
   z-index: 1001;
   display: grid;
-  grid-template-columns: 1fr;
-  max-width: 500px;
+  grid-template-rows: auto 1fr;
+  max-width: 640px;
+  width: 90%;
   background: var(--card-bg);
-  border-radius: 14px;
+  border-radius: 16px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
   overflow: hidden;
 }
 
@@ -852,17 +855,20 @@ a:hover {
 }
 
 .mm-body {
-  padding: 14px 16px;
+  padding: 16px 18px;
 }
 
 .mm-title {
-  margin: 0 0 6px;
-  font-size: 1.15rem;
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
 .mm-desc {
-  margin: 0 0 12px;
+  margin: 0 0 16px;
   color: var(--fg);
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .mm-actions {
@@ -871,20 +877,28 @@ a:hover {
   flex-wrap: wrap;
 }
 
-@media (max-width: 820px) {
+/* ──────────────────────────────
+   RESPONSIVE
+────────────────────────────── */
+@media (max-width: 768px) {
   .mm-dialog {
-    grid-template-columns: 1fr;
+    max-width: 95%;
+    width: 95%;
+    border-radius: 12px;
   }
-  .mm-media {
-    max-height: 44vh;
+  .mm-media-track img {
+    aspect-ratio: 16/9;
+  }
+  .mm-prev, .mm-next {
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
   }
 }
 .mm-media-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  overflow-x: auto;
   position: relative;
+  width: 100%;
+  background: #000; /* da marco oscuro mientras carga */
 }
 
 .mm-media-track {
@@ -895,10 +909,13 @@ a:hover {
 }
 
 .mm-media-track img {
-  flex: 0 0 auto;
+  flex: 0 0 100%;
   width: 100%;
-  border-radius: 8px;
-  object-fit: cover;
+  aspect-ratio: 4/3;
+  object-fit: contain; /* muestra la imagen completa */
+  scroll-snap-align: center;
+  background: #000;
+  border-radius: 0;
 }
 
 .mm-prev,
@@ -906,25 +923,32 @@ a:hover {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: var(--card-bg);
-  border: 1px solid var(--card-bd);
-  color: var(--fg);
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: #fff;
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height: 38px;
   cursor: pointer;
-  z-index: 2;
+  z-index: 5;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.4rem;
+  transition: background 0.2s ease;
+}
+
+.mm-prev:hover,
+.mm-next:hover {
+  background: rgba(0, 0, 0, 0.8);
 }
 
 .mm-prev {
-  left: 6px;
+  left: 10px;
 }
 
 .mm-next {
-  right: 6px;
+  right: 10px;
 }
 
 /*# sourceMappingURL=main.css.map */

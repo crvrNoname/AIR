@@ -1,64 +1,64 @@
 // src/js/modules/services.js
 export const SERVICES = {
-  mecanica: [
+mecanica: [
   {
-  id: 'motor',
-  title: 'Ajuste de motor',
-  img: ['motor/motor1.jpg','motor/motor2.jpg'],
-  desc: 'Servicio especializado en calibración, sincronización y optimización del motor para mejorar el rendimiento, reducir el consumo de combustible y alargar la vida útil del vehículo.'
-},
-{
-  id: 'filtroParticulas',
-  title: 'Filtro de partículas',
-  img: ["filtroParticulas/filtroParticulas1.jpg","filtroParticulas/filtroParticulas2.jpg"],
-  desc: 'Limpieza, regeneración y mantenimiento del filtro de partículas (DPF), eliminando acumulación de hollín y garantizando una correcta circulación de gases para evitar averías y cumplir normas ambientales.'
-},
-{
-  id: 'frenos',
-  title: 'Frenos',
-  img: ['frenos/frenos1.jpg','frenos/frenos2.jpg'],
-  desc: 'Mantenimiento integral del sistema de frenos: inspección de pastillas, discos, líquido de frenos y purgado del circuito para asegurar una frenada segura y confiable.'
-},
-{
-  id: 'airbag',
-  title: 'Airbag',
-  img: ['airbag/airbag1.jpg','airbag/airbag2.jpg'],
-  desc: 'Revisión y diagnóstico de los sistemas de airbag, reemplazo de módulos defectuosos y verificación de conexiones para mantener la seguridad en caso de impacto.'
-},
-{
-  id: 'ABS',
-  title: 'ABS',
-  img: ['ABS/ABS1.jpg','ABS/ABS2.jpg'],
-  desc: 'Comprobación y reparación del sistema antibloqueo de frenos (ABS), incluyendo sensores de rueda, módulo electrónico y cableado para garantizar estabilidad y control en frenadas bruscas.'
-}
+    id: 'motor',
+    title: 'Ajuste de motor',
+    img: ['motor/motor1.jpg', 'motor/motor2.jpg'],
+    desc: 'Servicio especializado en calibración, sincronización y optimización del motor para mejorar el rendimiento, reducir el consumo de combustible y alargar la vida útil del vehículo.'
+  },
+  {
+    id: 'filtroParticulas',
+    title: 'Filtro de partículas',
+    img: ['filtroParticulas/filtroParticulas1.jpg', 'filtroParticulas/filtroParticulas2.jpg'],
+    desc: 'Limpieza, regeneración y mantenimiento del filtro de partículas (DPF), eliminando acumulación de hollín y garantizando una correcta circulación de gases para evitar averías y cumplir normas ambientales.'
+  },
+  {
+    id: 'frenos',
+    title: 'Frenos',
+    img: ['frenos/frenos1.jpg', 'frenos/frenos2.jpg'],
+    desc: 'Mantenimiento integral del sistema de frenos: inspección de pastillas, discos, líquido de frenos y purgado del circuito para asegurar una frenada segura y confiable.'
+  },
+  {
+    id: 'airbag',
+    title: 'Airbag',
+    img: ['airbag/airbag1.jpg', 'airbag/airbag2.jpg'],
+    desc: 'Revisión y diagnóstico de los sistemas de airbag, reemplazo de módulos defectuosos y verificación de conexiones para mantener la seguridad en caso de impacto.'
+  },
+  {
+    id: 'ABS',
+    title: 'ABS',
+    img: ['ABS/ABS1.jpg', 'ABS/ABS2.jpg'],
+    desc: 'Comprobación y reparación del sistema antibloqueo de frenos (ABS), incluyendo sensores de rueda, módulo electrónico y cableado para garantizar estabilidad y control en frenadas bruscas.'
+  }
 ],
 electronica: [
-{
-  id: 'scanner',
-  title: 'Diagnóstico con escáner',
-  img: ['scanner/scanner1.jpg','scanner/scanner2.jpg'],
-  desc: 'Lectura de códigos OBD-II y diagnóstico avanzado con escáner automotriz, permitiendo detectar fallas electrónicas y mecánicas de manera rápida y precisa.'
-},
-{
-  id: 'bateria',
-  title: 'Batería',
-  img: ['bateria/bateria1.jpg','bateria/bateria2.jpg'],
-  desc: 'Pruebas de carga, verificación de bornes y reemplazo de baterías defectuosas para asegurar el correcto arranque y funcionamiento de los sistemas eléctricos del vehículo.'
-},
-{
-  id: 'TPMS',
-  title: 'TPMS',
-  img: ['tpms/tpms1.jpg','tpms/tpms2.jpg'],
-  desc: 'Diagnóstico, reparación y calibración del sistema de monitoreo de presión de neumáticos (TPMS) para garantizar seguridad, reducir desgaste y mejorar la eficiencia del consumo de combustible.'
-},
-{
-  id: 'lights',
-  title: 'Luces',
-  img: ['luces/luces1.jpg','luces/luces2.jpg'],
-  desc: 'Inspección, reparación y sustitución de faros y luces auxiliares, asegurando una correcta iluminación para mayor seguridad y visibilidad en la conducción.'
-}
+  {
+    id: 'scanner',
+    title: 'Diagnóstico con escáner',
+    img: ['scanner/scanner1.jpg', 'scanner/scanner2.jpg'],
+    desc: 'Lectura de códigos OBD-II y diagnóstico avanzado con escáner automotriz, permitiendo detectar fallas electrónicas y mecánicas de manera rápida y precisa.'
+  },
+  {
+    id: 'bateria',
+    title: 'Batería',
+    img: ['bateria/bateria1.jpg', 'bateria/bateria2.jpg'],
+    desc: 'Pruebas de carga, verificación de bornes y reemplazo de baterías defectuosas para asegurar el correcto arranque y funcionamiento de los sistemas eléctricos del vehículo.'
+  },
+  {
+    id: 'TPMS',
+    title: 'TPMS',
+    img: ['tpms/tpms1.jpg', 'tpms/tpms2.jpg'],
+    desc: 'Diagnóstico, reparación y calibración del sistema de monitoreo de presión de neumáticos (TPMS) para garantizar seguridad, reducir desgaste y mejorar la eficiencia del consumo de combustible.'
+  },
+  {
+    id: 'lights',
+    title: 'Luces',
+    img: ['luces/luces1.jpg', 'luces/luces2.jpg'],
+    desc: 'Inspección, reparación y sustitución de faros y luces auxiliares, asegurando una correcta iluminación para mayor seguridad y visibilidad en la conducción.'
+  }
+]
 
-  ]
 };
 
 
