@@ -18,51 +18,55 @@
 
  
   <!-- Open Graph Meta Tags OG-->
-         <meta property="og:title" content="AIR – Service">
-         <meta property="og:image" content="https://crvrnoname.github.io/AIR/assets/img/scanner.png">
-          <meta id="og-image" property="og:image" content="">
+   <meta property="og:image" content="https://crvrnoname.github.io/AIR/assets/img/logo.svg">
+<meta property="og:title" content="AIR – Service">
+<meta property="og:description" content="Su auto en las mejores manos">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://crvrnoname.github.io/AIR/">
+
    
 
   <!-- Bootstrap de rutas: decide prefijo y asigna href de CSS/JS/Favicon -->
   <script>
-    (function () {
-      function computeBase() {
-        const hinted = document.getElementById('site-base')?.getAttribute('data-base') || '';
-        const isLocal = /^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/i.test(location.hostname);
-        if (isLocal) return '';                            // Live Server → sin prefijo
-        if (hinted)  return hinted.replace(/\/+$/, '');    // Pages forzado
-        if (location.hostname.endsWith('github.io')) {     // Auto para Pages
-          const seg = location.pathname.split('/').filter(Boolean)[0];
-          return seg ? '/' + seg : '';
-        }
-        return '';
+  (function () {
+    function computeBase() {
+      const hinted = document.getElementById('site-base')?.getAttribute('data-base') || '';
+      const isLocal = /^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/i.test(location.hostname);
+      if (isLocal) return '';                            // Live Server → sin prefijo
+      if (hinted)  return hinted.replace(/\/+$/, '');    // Pages forzado
+      if (location.hostname.endsWith('github.io')) {     // Auto para Pages
+        const seg = location.pathname.split('/').filter(Boolean)[0];
+        return seg ? '/' + seg : '';
       }
-      const base = computeBase();
-      const inPagesFolder = /\/pages\//.test(location.pathname);
-      // Si usas estructura docs/ + pages/, las rutas relativas también son válidas:
-      const rel = inPagesFolder ? '..' : '.';
+      return '';
+    }
+    const base = computeBase();
+    const inPagesFolder = /\/pages\//.test(location.pathname);
+    // Si usas estructura docs/ + pages/, las rutas relativas también son válidas:
+    const rel = inPagesFolder ? '..' : '.';
 
-      // 1) Asigna favicon y css con prefijo base (para Pages) o relativo (para local)
-      function setHref(id, path) {
-        const el = document.getElementById(id);
-        if (el) el.setAttribute('href', (base || rel) + path);
-      }
-      setHref('icon-svg',      '/assets/img/favicon.svg');
-      setHref('icon-shortcut', '/assets/img/favicon.svg');
-      setHref('css-main',      '/assets/css/main.css');
-      setContent('og-image', '/assets/img/favicon.svg')
+    // 1) Asigna favicon y css con prefijo base (para Pages) o relativo (para local)
+    function setHref(id, path) {
+      const el = document.getElementById(id);
+      if (el) el.setAttribute('href', (base || rel) + path);
+    }
+    setHref('icon-svg',      '/assets/img/favicon.svg');
+    setHref('icon-shortcut', '/assets/img/favicon.svg');
+    setHref('css-main',      '/assets/css/main.css');
+    // ❌ quitado el setContent de og-image (los OG tags deben estar estáticos en el <head>)
 
-      // 2) Inyecta main.js (ESM) con el mismo prefijo
-      const s = document.createElement('script');
-      s.type = 'module';
-      s.src  = (base || rel) + '/assets/js/main.js';
-      s.defer = true;
-      document.head.appendChild(s);
+    // 2) Inyecta main.js (ESM) con el mismo prefijo
+    const s = document.createElement('script');
+    s.type = 'module';
+    s.src  = (base || rel) + '/assets/js/main.js';
+    s.defer = true;
+    document.head.appendChild(s);
 
-      // DEBUG opcional
-      // console.log('[bootstrap] base=', base, 'rel=', rel, 'src=', s.src);
-    })();
-  </script>
+    // DEBUG opcional
+    // console.log('[bootstrap] base=', base, 'rel=', rel, 'src=', s.src);
+  })();
+</script>
+
 </head>
 
 <body class="page page--home">
