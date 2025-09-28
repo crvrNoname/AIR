@@ -27,7 +27,7 @@ a:hover { text-decoration: underline; }
 
 /* Utilidades */
 .small { font-size: .9rem; color: var(--muted); }
-.mt-lg { margin-top: 2rem; }
+.mt-lg { margin: 2rem auto; }
 .subsection-title {
   margin: 1.25rem 0 .5rem;
   font-size: 1.125rem;

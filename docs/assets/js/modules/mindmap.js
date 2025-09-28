@@ -44,7 +44,7 @@ function mountModal() {
         <p class="mm-desc"></p>
         <div class="mm-actions">
           <a class="btn btn--wa" target="_blank" rel="noopener" id="mmWhatsapp">Pedir este servicio</a>
-          <a class="btn btn--ghost" href="../pages/servicios.html" id="mmVerMas">Ver más</a>
+          <a class="btn btn--ghost" href="../pages/cotiza.html" id="mmVerMas">Ver más</a>
         </div>
       </div>
     </div>`;

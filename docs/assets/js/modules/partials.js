@@ -16,6 +16,7 @@ function getBasePrefix() {
  * Reemplaza nodos con data-include="/partials/footer.html"
  * por el HTML remoto. Acepta rutas que empiecen con "/" (recomendado).
  */
+// src/js/modules/partials.js
 export async function includePartials(selector = '[data-include]') {
   const prefix = getBasePrefix();
   const nodes = document.querySelectorAll(selector);
@@ -23,7 +24,6 @@ export async function includePartials(selector = '[data-include]') {
     let path = el.getAttribute('data-include') || '';
     if (!path) return;
 
-    // Si empieza con "/", la resolvemos con prefix; si no, le añadimos "/"
     const url = path.startsWith('/')
       ? `${prefix}${path}`
       : `${prefix}/${path}`;
@@ -35,10 +35,23 @@ export async function includePartials(selector = '[data-include]') {
     }
     const html = await res.text();
 
-    // Insertar en el DOM (reemplazo del placeholder)
     const wrapper = document.createElement('div');
     wrapper.innerHTML = html;
-    // Reemplaza el elemento por el contenido cargado
+
+    // 🔑 Ajustar rutas dinámicamente
+    wrapper.querySelectorAll('[data-link]').forEach(link => {
+      let target = link.getAttribute('data-link');
+      if (/\/pages\//.test(location.pathname)) {
+        // Estamos dentro de /pages → subir un nivel
+        link.setAttribute('href', `../${target}`);
+      } else {
+        // Estamos en index → usar normal
+        link.setAttribute('href', `./${target}`);
+      }
+    });
+
+    // Reemplaza el placeholder por el contenido cargado
     el.replaceWith(...wrapper.childNodes);
   }));
 }
+
