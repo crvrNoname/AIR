@@ -1,6 +1,7 @@
-// docs/assets/js/modules/mindmap.js
+// src/js/modules/mindmap.js
 import { SERVICES } from './services.js';
 import { buildWhatsAppLink } from './contact.js';
+import { AUTODIAG } from './autodiagnosticos.js';
 
 function basePrefix() {
   const hinted = document.getElementById('site-base')?.getAttribute('data-base') || '';
@@ -110,21 +111,126 @@ const mediaHTML = imgs.length > 1
       <h3 class="mm-title" id="mmTitle">${title}</h3>
       <p class="mm-desc">${desc}</p>
       <div class="mm-actions">
-        <a class="btn btn--wa" target="_blank" rel="noopener" id="mmWhatsapp">Pedir este servicio</a>
-        <a class="btn btn--ghost" href="../pages/servicios.html" id="mmVerMas">Ver más</a>
-      </div>
+  <a class="btn btn--wa" target="_blank" rel="noopener" id="mmWhatsapp">
+    Pedir este servicio
+  </a>
+  <button class="btn btn--secondary is-hidden" id="mmSendDiag">
+    Enviar por WhatsApp
+  </button>
+  <button class="btn btn--ghost" id="mmToggleDiag">
+    Autodiagnóstico
+  </button>
+</div>
+
+
+
     </div>
   `;
 
   const text = encodeURIComponent(`Hola, quiero *${title}* luego de un diagnóstico con escáner.`);
   modal.querySelector('#mmWhatsapp').setAttribute('href', buildWhatsAppLink(phone, text));
+const autodiagBtn = modal.querySelector('#mmToggleDiag');
+const sendDiagBtn = modal.querySelector('#mmSendDiag');
+
+if (autodiagBtn) {
+  autodiagBtn.addEventListener('click', () => {
+    const dialog = modal.querySelector('.mm-dialog');
+    const body   = modal.querySelector('.mm-body');
+    let diag     = body.querySelector('.mm-autodiag');
+    const media  = dialog.querySelector('.mm-media, .mm-media-group');
+    const title  = body.querySelector('.mm-title');
+    const desc   = body.querySelector('.mm-desc');
+
+    // crear autodiagnóstico si no existe
+    if (!diag) {
+      const diagHTML = renderAutodiag(node.id);
+      body.querySelector('.mm-actions').insertAdjacentHTML('beforebegin', diagHTML);
+      diag = body.querySelector('.mm-autodiag');
+    }
+
+    // toggle
+    const showingDiag = diag.classList.toggle('is-visible');
+    if (showingDiag) {
+      media?.classList.add('is-hidden');
+      title?.classList.add('is-hidden');
+      desc?.classList.add('is-hidden');
+      diag.style.display = 'block';
+      autodiagBtn.textContent = 'Cerrar';
+      sendDiagBtn?.classList.remove('is-hidden'); // mostrar botón
+    } else {
+      media?.classList.remove('is-hidden');
+      title?.classList.remove('is-hidden');
+      desc?.classList.remove('is-hidden');
+      diag.style.display = 'none';
+      autodiagBtn.textContent = 'Autodiagnóstico';
+      sendDiagBtn?.classList.add('is-hidden'); // ocultar botón
+    }
+  });
+}
+
+
 
   if (imgs.length > 1) {
   enableCarousel(modal.querySelector('.mm-media-group'));
 }
 
-  modal.setAttribute('open', '');
+// Botón Enviar por WhatsApp (Autodiagnóstico)
+const btnSendDiag = modal.querySelector('#mmSendDiag');
+if (btnSendDiag) {
+  btnSendDiag.addEventListener('click', () => {
+    const text = encodeURIComponent(getCheckedAutodiag(modal, title));
+    const link = buildWhatsAppLink(phone, text);
+    window.open(link, '_blank');
+  });
 }
+
+  modal.setAttribute('open', '');
+
+
+
+}
+
+function renderAutodiag(id) {
+  const diag = AUTODIAG[id];
+  if (!diag) return '<p>No hay autodiagnóstico disponible.</p>';
+
+  const renderChecklist = (items) =>
+    `<ul class="mm-checklist">
+      ${items.map((txt, i) => `
+        <li>
+          <label>
+            <input type="checkbox" class="mm-check" id="${id}-${i}" />
+            <span>${txt}</span>
+          </label>
+        </li>`).join('')}
+    </ul>`;
+
+  return `
+    <div class="mm-autodiag">
+      <h4>📌 Preguntas base</h4>
+      ${renderChecklist(diag.preguntas)}
+
+      <h4>🔧 Autodiagnóstico</h4>
+      ${renderChecklist(diag.pasos)}
+    </div>
+  `;
+}
+
+
+function getCheckedAutodiag(modal, title) {
+  const checks = modal.querySelectorAll('.mm-check:checked');
+  if (!checks.length) return `Hola, revisé el *${title}* y quiero más información.`;
+
+  let msg = `🔎 Autodiagnóstico de *${title}*:\n\n`;
+  checks.forEach(c => {
+    const txt = c.nextElementSibling?.textContent.trim();
+    if (txt) msg += `✅ ${txt}\n`;
+  });
+
+  msg += "\nQuiero que me asesoren con este servicio. 🚗";
+  return msg;
+}
+
 
 
 export function initMindMap(selector, { phone }) {
