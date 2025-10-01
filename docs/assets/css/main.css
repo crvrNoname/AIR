@@ -817,17 +817,41 @@ a:hover {
   color: #FF1E1E;
 }
 
-/* ===================== Modal Responsive Mejorado ===================== */
+/* ===================== Modal ===================== */
+.mm-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+}
+
+.mm-modal[open] {
+  display: block;
+}
+
+.mm-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(3px);
+}
+
 .mm-dialog {
+  position: absolute;
+  inset: 50% auto auto 50%;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1001;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  max-width: 640px;
+  width: 90%;
   display: flex;
   flex-direction: column;
   width: min(95%, 800px); /* ocupa casi todo el ancho en mobile, máx. 800px en desktop */
-  max-height: 90vh; /* nunca mayor al viewport */
+  max-height: 90vh;
   background: var(--card-bg);
   border-radius: 16px;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
@@ -1041,39 +1065,6 @@ a:hover {
 .mm-autodiag ul {
   margin: 0.25rem 0 1rem 1.2rem;
   padding: 0;
-}
-
-.mm-checklist {
-  list-style: none;
-  margin: 0.5rem 0 1rem;
-  padding: 0;
-  display: grid;
-  gap: 0.5rem;
-}
-
-.mm-checklist li {
-  display: flex;
-  align-items: flex-start;
-}
-
-.mm-checklist input[type=checkbox] {
-  margin-right: 8px;
-  accent-color: var(--accent);
-  transform: scale(1.2);
-}
-
-.mm-checklist span {
-  line-height: 1.4;
-  color: var(--fg);
-}
-
-#mmSendDiag {
-  transition: opacity 0.2s ease;
-}
-
-#mmSendDiag.is-hidden {
-  opacity: 0;
-  pointer-events: none;
 }
 
 /*# sourceMappingURL=main.css.map */
