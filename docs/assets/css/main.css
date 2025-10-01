@@ -817,71 +817,128 @@ a:hover {
   color: #FF1E1E;
 }
 
-/* ===================== Modal ===================== */
-.mm-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: none;
-}
-
-.mm-modal[open] {
-  display: block;
-}
-
-.mm-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(3px);
-}
-
+/* ===================== Modal Responsive Mejorado ===================== */
 .mm-dialog {
-  position: absolute;
-  inset: 50% auto auto 50%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1001;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  max-width: 640px;
-  width: 90%;
+  display: flex;
+  flex-direction: column;
+  width: min(95%, 800px); /* ocupa casi todo el ancho en mobile, máx. 800px en desktop */
+  max-height: 90vh; /* nunca mayor al viewport */
   background: var(--card-bg);
   border-radius: 16px;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
   overflow: hidden;
-}
-
-.mm-media {
-  aspect-ratio: 4/3;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.mm-body {
-  padding: 16px 18px;
-}
-
-.mm-title {
-  margin: 0 0 8px;
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
-.mm-desc {
-  margin: 0 0 16px;
-  color: var(--fg);
-  font-size: 0.95rem;
+  font-size: clamp(0.9rem, 1.5vmin, 1rem); /* tipografía adaptable */
   line-height: 1.5;
 }
 
-.mm-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 1rem;
+/* Cuerpo con scroll si hay mucho contenido */
+.mm-body {
+  padding: clamp(12px, 2vmin, 20px);
+  overflow-y: auto;
+  flex: 1; /* ocupa todo el espacio restante */
 }
 
+/* Títulos y descripciones */
+.mm-title {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.2rem, 2vmin, 1.6rem);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.mm-desc {
+  margin: 0 0 1rem;
+  font-size: clamp(0.9rem, 1.6vmin, 1rem);
+  color: var(--fg);
+}
+
+/* Galería de imágenes */
+.mm-media-group {
+  position: relative;
+  width: 100%;
+  max-height: 40vh; /* evita que las fotos dominen todo el popup */
+  background: #000;
+  flex-shrink: 0;
+}
+
+.mm-media-track img {
+  flex: 0 0 100%;
+  width: 100%;
+  object-fit: contain;
+  aspect-ratio: 16/9;
+  max-height: 40vh;
+}
+
+/* Botones de navegación */
+.mm-prev,
+.mm-next {
+  width: clamp(32px, 5vmin, 44px);
+  height: clamp(32px, 5vmin, 44px);
+  font-size: clamp(1rem, 2vmin, 1.4rem);
+}
+
+/* Autodiagnóstico */
+.mm-autodiag {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  font-size: clamp(0.85rem, 1.5vmin, 0.95rem);
+  border-top: 1px solid var(--card-bd);
+}
+
+.mm-autodiag h4 {
+  margin: 0.5rem 0;
+  font-size: clamp(1rem, 1.8vmin, 1.1rem);
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.mm-checklist {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.mm-checklist li {
+  display: flex;
+  flex-wrap: wrap; /* 👈 para que labels no se desborden */
+  gap: 0.5rem;
+}
+
+.mm-checklist input[type=checkbox],
+.mm-checklist input[type=radio] {
+  accent-color: var(--accent);
+  transform: scale(1.2);
+}
+
+/* Botones finales */
+.mm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: auto; /* siempre abajo */
+}
+
+/* ──────────────────────────────
+   RESPONSIVE AÚN MÁS AGRESIVO
+────────────────────────────── */
+@media (max-width: 600px) {
+  .mm-dialog {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    border-radius: 0; /* ocupa todo en mobile */
+  }
+  .mm-media-group {
+    max-height: 30vh;
+  }
+  .mm-body {
+    padding: 12px;
+  }
+}
 /* ──────────────────────────────
    RESPONSIVE
 ────────────────────────────── */

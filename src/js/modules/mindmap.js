@@ -141,30 +141,36 @@ if (autodiagBtn) {
     const title  = body.querySelector('.mm-title');
     const desc   = body.querySelector('.mm-desc');
 
-    // crear autodiagnóstico si no existe
-    if (!diag) {
-      const diagHTML = renderAutodiag(node.id);
-      body.querySelector('.mm-actions').insertAdjacentHTML('beforebegin', diagHTML);
-      diag = body.querySelector('.mm-autodiag');
-    }
+ // crear autodiagnóstico si no existe
+if (!diag) {
+  const diagHTML = renderAutodiag(node.id);
+  body.querySelector('.mm-actions').insertAdjacentHTML('beforebegin', diagHTML);
+  diag = body.querySelector('.mm-autodiag');
 
-    // toggle
-    const showingDiag = diag.classList.toggle('is-visible');
-    if (showingDiag) {
-      media?.classList.add('is-hidden');
-      title?.classList.add('is-hidden');
-      desc?.classList.add('is-hidden');
-      diag.style.display = 'block';
-      autodiagBtn.textContent = 'Cerrar';
-      sendDiagBtn?.classList.remove('is-hidden'); // mostrar botón
-    } else {
-      media?.classList.remove('is-hidden');
-      title?.classList.remove('is-hidden');
-      desc?.classList.remove('is-hidden');
-      diag.style.display = 'none';
-      autodiagBtn.textContent = 'Autodiagnóstico';
-      sendDiagBtn?.classList.add('is-hidden'); // ocultar botón
-    }
+  if (!diag) {
+    console.error("❌ No se pudo crear el autodiagnóstico. node.id =", node.id);
+    return; // salimos para no romper
+  }
+}
+
+// toggle
+const showingDiag = diag.classList.toggle('is-visible');
+if (showingDiag) {
+  media?.classList.add('is-hidden');
+  title?.classList.add('is-hidden');
+  desc?.classList.add('is-hidden');
+  diag.style.display = 'block';
+  autodiagBtn.textContent = 'Cerrar';
+  sendDiagBtn?.classList.remove('is-hidden'); // mostrar botón
+} else {
+  media?.classList.remove('is-hidden');
+  title?.classList.remove('is-hidden');
+  desc?.classList.remove('is-hidden');
+  diag.style.display = 'none';
+  autodiagBtn.textContent = 'Autodiagnóstico';
+  sendDiagBtn?.classList.add('is-hidden'); // ocultar botón
+}
+
   });
 }
 
@@ -188,48 +194,106 @@ if (btnSendDiag) {
 
 
 
-}
-
+}   
 function renderAutodiag(id) {
   const diag = AUTODIAG[id];
-  if (!diag) return '<p>No hay autodiagnóstico disponible.</p>';
+  if (!diag) {
+    console.warn("⚠️ No hay autodiagnóstico definido para:", id);
+    return '<p>No hay autodiagnóstico disponible.</p>';
+  }
 
-  const renderChecklist = (items) =>
-    `<ul class="mm-checklist">
-      ${items.map((txt, i) => `
-        <li>
-          <label>
-            <input type="checkbox" class="mm-check" id="${id}-${i}" />
-            <span>${txt}</span>
-          </label>
-        </li>`).join('')}
-    </ul>`;
+  const renderChecklist = (items, id) => `
+    <ul class="mm-checklist">
+      ${items.map((item, i) => {
+        // Caso 1: string simple → checkbox
+        if (typeof item === "string") {
+          return `
+            <li>
+              <label>
+                <input type="checkbox" class="mm-check" data-tipo="check" id="${id}-c${i}" />
+                <span>${item}</span>
+              </label>
+            </li>`;
+        }
+
+        // Caso 2: Sí / No → radios
+        if (item.tipo === "siNo") {
+          const name = `${id}-sn${i}`;
+          return `
+            <li>
+              <span>${item.texto}</span>
+              <label style="margin-left:.5rem;">
+                <input type="radio" name="${name}" value="Sí" data-tipo="siNo"> Sí
+              </label>
+              <label style="margin-left:.75rem;">
+                <input type="radio" name="${name}" value="No" data-tipo="siNo"> No
+              </label>
+            </li>`;
+        }
+
+        // Caso 3: Opciones → select
+        if (item.tipo === "opciones") {
+          return `
+            <li>
+              <span>${item.texto}</span>
+              <select name="${id}-op${i}" data-tipo="opciones" style="margin-left:.5rem;">
+                <option value="">Seleccione</option>
+                ${item.opciones.map(op => `<option value="${op}">${op}</option>`).join("")}
+              </select>
+            </li>`;
+        }
+
+        // Caso 4: fallback (objeto inesperado) → checkbox con texto
+        return `
+          <li>
+            <label>
+              <input type="checkbox" class="mm-check" data-tipo="check" id="${id}-c${i}" />
+              <span>${item.texto ?? ""}</span>
+            </label>
+          </li>`;
+      }).join("")}
+    </ul>
+  `;
 
   return `
     <div class="mm-autodiag">
       <h4>📌 Preguntas base</h4>
-      ${renderChecklist(diag.preguntas)}
+      ${renderChecklist(diag.preguntas, id)}
 
       <h4>🔧 Autodiagnóstico</h4>
-      ${renderChecklist(diag.pasos)}
+      ${renderChecklist(diag.pasos, id)}
     </div>
   `;
 }
 
 
 function getCheckedAutodiag(modal, title) {
-  const checks = modal.querySelectorAll('.mm-check:checked');
-  if (!checks.length) return `Hola, revisé el *${title}* y quiero más información.`;
+  let msg = `📝 Informe de Autodiagnóstico – *${title}*\n\n`;
 
-  let msg = `🔎 Autodiagnóstico de *${title}*:\n\n`;
-  checks.forEach(c => {
+  // Checkboxes
+  modal.querySelectorAll('.mm-check[data-tipo="check"]:checked').forEach(c => {
     const txt = c.nextElementSibling?.textContent.trim();
-    if (txt) msg += `✅ ${txt}\n`;
+    if (txt) msg += `✔️ ${txt}\n`;
   });
 
-  msg += "\nQuiero que me asesoren con este servicio. 🚗";
+  // Sí/No
+  modal.querySelectorAll('input[data-tipo="siNo"]:checked').forEach(r => {
+    const pregunta = r.closest('li').querySelector('span')?.textContent.trim();
+    if (pregunta) msg += `${pregunta}: ${r.value === "Sí" ? "✔️ Sí" : "❌ No"}\n`;
+  });
+
+  // Opciones
+  modal.querySelectorAll('select[data-tipo="opciones"]').forEach(sel => {
+    if (sel.value) {
+      const pregunta = sel.closest('li').querySelector('span')?.textContent.trim();
+      msg += `${pregunta}: ${sel.value}\n`;
+    }
+  });
+
+  msg += "\n📩 Solicito asesoría sobre este servicio. 🚗";
   return msg;
 }
+
 
 
 
