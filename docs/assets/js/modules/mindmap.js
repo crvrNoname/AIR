@@ -179,6 +179,7 @@ if (showingDiag) {
   });
 }
 
+const focusable = modal.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
 
 
   if (imgs.length > 1) {
