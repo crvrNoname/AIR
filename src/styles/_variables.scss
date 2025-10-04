@@ -6,6 +6,7 @@ $radius: 12px;
 $shadow: 0 2px 8px rgba(0,0,0,.25);
 $gap: 16px; // 👈 Nueva variable global para espacios en grids y layouts
 
+$font-main: "FreeSans", system-ui, sans-serif;
 /* (si necesitas más constantes fijas, agrégalas aquí) */
 
 /* 🔹 Tokens CSS (sí dependen del tema, se sobrescriben con [data-theme]) */
@@ -26,6 +27,8 @@ $gap: 16px; // 👈 Nueva variable global para espacios en grids y layouts
     --wa-bg: #2dd4bf;                  /* fondo del botón */
   --wa-fg: #003018;                  /* texto/contraste si lo usas */
   --wa-dropshadow: rgba(240,240,240,.85); /* halo claro por defecto */
+
+  --x-color: #C8C9C7;
 }
 
 
@@ -45,7 +48,7 @@ html[data-theme="scania"] {
   --btn-fg: #FAFAFA;
   --card-l:#041E42;
    --card-bg-t:#000000;
-   --card-t:#5a5357; /*color testigo*/
+   --card-t:#aeaeae; /*color testigo*/
 
    --wa-bg: #041E42;                   /* Azul Scania */
   --wa-fg: #FAFAFA;
@@ -68,7 +71,7 @@ html[data-theme="scania-dark"] {
   --btn-fg: #FAFAFA;    /* Texto en botones */
   --card-l:#FAFAFA;
   --card-bg-t:#000000; /*color fondo testigo*/
-  --card-t:#535a55; /*color testigo*/
+  --card-t:#aeaeae; /*color testigo*/
 
 
   /* WhatsApp FAB (consistente con marca) */

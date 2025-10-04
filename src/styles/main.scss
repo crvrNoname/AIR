@@ -1,4 +1,5 @@
 /* src/styles/main.scss */
+@use "./fonts";
 @use "./variables" as v;
 @use "./mixins" as m;
 @use "./floatingBar";
@@ -16,6 +17,7 @@ body {
   font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   background: var(--bg);
   color: var(--fg);
+  font-family: v.$font-main;
 }
 
 /* Enlaces */
@@ -152,7 +154,7 @@ cursor: pointer;
 /* ===== Footer ===== */
 .footer {
   margin-top: 48px;
-  padding: 24px 0;
+  padding: 20px 0 80px 0;
   border-top: 1px solid var(--card-bd);
   background: transparent;
   color: var(--fg);
@@ -408,41 +410,65 @@ $service-colors: (
   }
 }
 /* ===================== Modal ===================== */
-.mm-modal {  position: fixed; 
-  inset: 0; 
-  z-index: 1000; 
-  display: none; }
-.mm-modal[open] { display: block; }
-.mm-backdrop { 
-  position: absolute; 
-  inset: 0; 
-  background: rgba(0,0,0,.65); 
-  backdrop-filter: blur(3px); 
+.mm-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+
+  &[open] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  &.is-closing {
+    opacity: 0;
+    pointer-events: none;
+  }
 }
-.mm-dialog {
+
+.mm-backdrop {
   position: absolute;
-  inset: 50% auto auto 50%;
-   position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+
+.mm-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -46%);
+  opacity: 0;
+  transition: opacity .35s ease, transform .45s cubic-bezier(.22,1,.36,1);
   z-index: 1001;
 
-  display: grid;
-  grid-template-rows: auto 1fr;
-  max-width: 640px;
-  width: 90%;  display: flex;
+  display: flex;
   flex-direction: column;
-
-  width: min(95%, 800px);    /* ocupa casi todo el ancho en mobile, máx. 800px en desktop */
+  width: min(95%, 800px);
   max-height: 90vh;
-
   background: var(--card-bg);
   border-radius: 16px;
   box-shadow: 0 8px 28px rgba(0,0,0,.35);
   overflow: hidden;
-  font-size: clamp(0.9rem, 1.5vmin, 1rem); /* tipografía adaptable */
-  line-height: 1.5;
 }
+
+.mm-modal[open] .mm-dialog {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+  transition-delay: .95s;
+}
+
+.mm-modal.is-closing .mm-dialog {
+  opacity: 0;
+  transform: translate(-50%, -48%);
+  transition-delay: 0s;
+}
+
 
 /* Cuerpo con scroll si hay mucho contenido */
 .mm-body {
@@ -637,5 +663,26 @@ margin: 0.5rem 0;
   margin: 0.25rem 0 1rem 1.2rem;
   padding: 0;
 }
+
+
+.mm-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 2rem;        /* más grande para que se note */
+  font-weight: bold;      /* hace la X más marcada */
+  line-height: 1;
+  cursor: pointer;
+  color: var(--x-color, #fff); /* fallback blanco si var(--fg) no existe */
+  z-index: 10;            /* por si se esconde detrás de imágenes */
+}
+
+.mm-close:hover {
+  color: var(--accent, red); /* usa var(--accent) o rojo por defecto */
+}
+
+
 
 

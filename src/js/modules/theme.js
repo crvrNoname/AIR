@@ -47,6 +47,7 @@ export function applyTheme(theme) {
   updateLogosForTheme(t);
   updateWhatsappFabForTheme(t);
   updateThemeToggleIcons(t);
+    updateSosFabForTheme(t); 
 }
 
 export function initThemeSwitcher() {
@@ -157,4 +158,22 @@ function updateThemeToggleIcons(theme) {
     const img = moonBtn.querySelector('img');
     if (img) img.src = `${cfg.moon}?v=${Date.now()}`;
   }
+}
+
+
+// 🆘 SOS FAB + FloatingBar icon por tema
+function updateSosFabForTheme(theme) {
+  const base = getBasePrefix();
+  const map = {
+    scania:        `${base}/assets/img/float/sosDark.svg`, // claro
+    'scania-dark': `${base}/assets/img/float/sos.svg`,     // oscuro
+  };
+
+  ['sosFloat', 'sosFloatBar'].forEach(id => {
+    const a = document.getElementById(id);
+    if (!a) return;
+    const img = a.querySelector('img');
+    if (!img) return;
+    img.src = `${map[theme] || map['scania']}?v=${Date.now()}`;
+  });
 }

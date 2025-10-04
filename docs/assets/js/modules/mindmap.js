@@ -106,6 +106,7 @@ const mediaHTML = imgs.length > 1
 
 
   modal.querySelector('.mm-dialog').innerHTML = `
+    <button class="mm-close" data-close aria-label="Cerrar">×</button>
     ${mediaHTML}
     <div class="mm-body">
       <h3 class="mm-title" id="mmTitle">${title}</h3>
@@ -120,6 +121,10 @@ const mediaHTML = imgs.length > 1
   <button class="btn btn--ghost" id="mmToggleDiag">
     Autodiagnóstico
   </button>
+  <a class="btn btn--secondary" href="tel:+56988934851" aria-label="Llamar por teléfono">
+  SOS
+</a>
+
 </div>
 
 
@@ -160,7 +165,7 @@ if (showingDiag) {
   title?.classList.add('is-hidden');
   desc?.classList.add('is-hidden');
   diag.style.display = 'block';
-  autodiagBtn.textContent = 'Cerrar';
+  autodiagBtn.textContent = 'Atrás';
   sendDiagBtn?.classList.remove('is-hidden'); // mostrar botón
 } else {
   media?.classList.remove('is-hidden');
@@ -179,6 +184,8 @@ if (showingDiag) {
   if (imgs.length > 1) {
   enableCarousel(modal.querySelector('.mm-media-group'));
 }
+
+
 
 // Botón Enviar por WhatsApp (Autodiagnóstico)
 const btnSendDiag = modal.querySelector('#mmSendDiag');
@@ -795,3 +802,4 @@ const ICON_BY_ID = {
   bateria: 'bateria',
   TPMS: 'TPMS'
 };
+
