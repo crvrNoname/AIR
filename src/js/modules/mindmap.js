@@ -351,9 +351,10 @@ export function initMindMap(selector, { phone }) {
           ${iconSVG('scanner')}
           <span class="mindmap__text">Abrir diagnóstico con escáner</span>
         </span>`;
-      center.addEventListener('click', () =>
-        openModal({ id: 'scanner', title: 'OBD / Scanner' }, phone)
-      );
+    center.addEventListener('click', () => {
+  setTimeout(() => openModal({ id: 'scanner', title: 'OBD / Scanner' }, phone), 950);
+});
+
       center.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -381,7 +382,11 @@ export function initMindMap(selector, { phone }) {
         <span class="mindmap__text">${title}</span>
       </span>`;
 
-    el.addEventListener('click', () => openModal({ id, title }, phone));
+    el.addEventListener('click', () => {
+  // 🔹 Pequeño delay antes de mostrar el popup
+  setTimeout(() => openModal({ id, title }, phone), 950);
+});
+
     el.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
