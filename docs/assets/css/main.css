@@ -886,11 +886,12 @@ a:hover {
 
 /* Cuerpo con scroll si hay mucho contenido */
 .mm-body {
-  padding: clamp(12px, 2vmin, 20px);
-  overflow-y: auto;
-  flex: 1; /* ocupa todo el espacio restante */
+  flex: 1; /* ocupa el espacio restante */
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  padding: clamp(12px, 2vmin, 20px);
+  overflow-y: auto;
   gap: 0.5rem;
 }
 
@@ -913,10 +914,14 @@ a:hover {
 /* Galería de imágenes */
 .mm-media-group {
   position: relative;
+  flex-shrink: 0; /* la imagen no colapsa */
   width: 100%;
-  max-height: 40vh; /* evita que las fotos dominen todo el popup */
+  max-height: 45vh; /* nunca pasa del 45% de la altura total */
   background: #000;
-  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .mm-media-track img {
