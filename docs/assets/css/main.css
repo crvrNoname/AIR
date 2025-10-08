@@ -1118,4 +1118,29 @@ a:hover {
   color: var(--accent, red); /* usa var(--accent) o rojo por defecto */
 }
 
+/* ===================== Fondo Mosaico SVG ===================== */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url("../../assets/img/background/gears.svg");
+  background-repeat: repeat;
+  background-size: 120px auto; /* ajusta según densidad del patrón */
+  background-position: center;
+  opacity: 0.06; /* sutil para no distraer */
+  filter: brightness(0) invert(1); /* opcional para temas oscuros */
+  pointer-events: none; /* evita bloquear clics */
+}
+
+html[data-theme=scania] body::before {
+  opacity: 0.1;
+  filter: brightness(0) invert(0); /* SVG oscuro sobre fondo claro */
+}
+
+html[data-theme=dark] body::before {
+  opacity: 0.05;
+  filter: brightness(0) invert(1); /* SVG claro sobre fondo oscuro */
+}
+
 /*# sourceMappingURL=main.css.map */
